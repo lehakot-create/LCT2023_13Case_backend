@@ -1,5 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
+
 
 # Create your models here.
 
@@ -16,15 +18,11 @@ class Status(models.Model):
 class Stack(models.Model):
     name = models.CharField(max_length=64)
 
-    def method(self):
-        pass
-
 
 # Таблица пользователей
 class Users(models.Model):
     id_status = models.ForeignKey(Status, on_delete=models.DO_NOTHING)
-    username = models.CharField(max_length=60)
-    password = models.CharField(max_length=100)  # hash поправить тип
+    #profile = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     first_last_name = models.CharField(max_length=128)  # ФИО
     description = models.CharField(max_length=1024)  # Описание
     img = models.ImageField()  # посмотреть тип картинка
@@ -39,6 +37,7 @@ class Users(models.Model):
     def get_rating(self):
         pass
 
+    # нужно добавить две функции чтобы создавался профиль пользователя при создании юзера. Это если первый путь выберешь
 
 # Тип проекта - коммерческий/некоммерческий
 class TypeProject(models.Model):
@@ -83,9 +82,9 @@ class Project(models.Model):
     id_project_type = models.ForeignKey(TypeProject, on_delete=models.DO_NOTHING)
     name = models.CharField(max_length=128)
     id_type = models.ForeignKey(Public, on_delete=models.DO_NOTHING)  # Тип проекта (открытый/закрытый)
-    author = models.ForeignKey(Users, on_delete=models.DO_NOTHING)
+    # author = models.ForeignKey(Users, on_delete=models.DO_NOTHING)
     members_limit = models.IntegerField()  # Максимальное количество участников
-    # members = ArrayField(models.ForeignKey(Users, on_delete=models.DO_NOTHING))  # Список участников. ПОКА НЕ ЗНАЮ, КАК СВЯЗАТЬ ТАБЛИЦЫ В МАССИВ
+    members = models.ManyToManyField(Users)  # Список участников. Получаем список всех участников проекта
     direction = models.ForeignKey(Direction, on_delete=models.CASCADE)
     deadline = models.DateField()  # срок окончания проекта
     id_rate = models.ForeignKey(Rate, on_delete=models.DO_NOTHING)  # тариф
