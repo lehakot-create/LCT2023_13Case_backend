@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.contrib.postgres.fields import ArrayField
 
 
 # Create your models here.
@@ -22,7 +21,7 @@ class Stack(models.Model):
 # Таблица пользователей
 class Users(models.Model):
     id_status = models.ForeignKey(Status, on_delete=models.DO_NOTHING)
-    #profile = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    profile = models.OneToOneField(User, on_delete=models.CASCADE)
     first_last_name = models.CharField(max_length=128)  # ФИО
     description = models.CharField(max_length=1024)  # Описание
     img = models.ImageField()  # посмотреть тип картинка
