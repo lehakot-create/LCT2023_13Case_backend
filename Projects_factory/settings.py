@@ -142,3 +142,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ),
 }
+
+AUTH_USER_MODEL = 'main_app.Profile'
+
