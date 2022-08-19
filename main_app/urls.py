@@ -4,8 +4,8 @@ from rest_framework import routers
 from main_app.views import ProfileViewSet, MostPopularProjectsViewSet
 
 router = routers.DefaultRouter()
-router.register(r'profile', ProfileViewSet)
-router.register(r'popular_proj', MostPopularProjectsViewSet)
+router.register(r'v1/profile', ProfileViewSet)
+router.register(r'v1/popular_proj', MostPopularProjectsViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
