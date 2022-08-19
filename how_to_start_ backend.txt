@@ -1,0 +1,36 @@
+1. Установить python по ссылке https://www.python.org/downloads/release/python-3913/ 
+	(обязательно ставим галочку напротив add Python in PATH)
+2. Создать пустую папку, в которую будет клонироваться репозиторий проекта (C:\NewProject)
+3. В коммандной строке (терминале) переходим в созданную папку (cd NewProject)
+4. Создаем виртуальное окружение командой "python -m venv venv"
+5. Запускаем виртуальное окружение. Выполняем команду "cd venv\Scripts", затем "activate".
+6. Возвращаемя в корневой каталог папки проекта
+7. Клонируем репозиторий (git clone git@github.com:Space-dreams/Projects-factory.git -b igor_dev)
+8. Переходим в склонированный репозиторий
+9. Устанавливаем библиотеки "pip install -r requirements.txt"
+10. Чтобы не устанавливать PostgreSQL и использовать встроенный sqllite, можно закомментировать следующие строки в файле settings.py:
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'projects_factory_db',
+        'USER': 'postgres',
+        'PASSWORD': '123',
+        'HOST': '127.0.0.1',
+        'PORT': '5432'
+    }
+}
+
+
+
+и раскомментировать строки:
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+11. Делаем миграции командой "manage.py migrate"
+12. Заполняем нашу БД некоторыми предустановленными значениями командой:
+	"python manage.py loaddata main_app/fixtures/initial_data.json"
