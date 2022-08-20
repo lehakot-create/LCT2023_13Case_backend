@@ -34,3 +34,4 @@ DATABASES = {
 11. Делаем миграции командой "manage.py migrate"
 12. Заполняем нашу БД некоторыми предустановленными значениями командой:
 	"python manage.py loaddata main_app/fixtures/initial_data.json"
+13. Запускаем сервер Джанго командой manage.py runserver 8000
