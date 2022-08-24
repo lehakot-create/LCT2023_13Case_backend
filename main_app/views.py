@@ -1,7 +1,12 @@
+import requests
+from django.http import HttpResponse
 from django.shortcuts import render
+from django.views import View
+
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.response import Response
+from rest_framework.generics import GenericAPIView
+from rest_framework.views import APIView
 
 from .models import Profile, Project
 from .serializers import ProfileViewSetSerializer, MostPopularProjectsSerializer
@@ -41,3 +46,17 @@ class MostPopularProjectsViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Project.objects.order_by('-rating')[:3]
+
+
+class ActivateUser(View):
+    '''
+    Класс активации юзера по ссылке, полученной на email
+    '''
+    def get(self, request, uid, token):
+        payload = {'uid': uid, 'token': token}
+        url = "http://localhost:8000/api/v1/auth/users/activation/"
+        response = requests.post(url, data = payload)
+        if response.status_code == 204:
+            return HttpResponse("Профиль успешно активирован!")
+        else:
+            return HttpResponse(response)

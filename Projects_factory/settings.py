@@ -155,7 +155,23 @@ CORS_ALLOWED_ORIGINS = [
 
 ]
 
+
+
+
 DJOSER = {
-    'ACTIVATION_URL': '#/activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': False,
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'api/v1/activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
 }
+
+#smpt
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 'django.testemail@yandex.ru'
+EMAIL_HOST_PASSWORD = 'cyyvemskxtcoaypy'
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
