@@ -2,7 +2,7 @@ from django.contrib.auth.hashers import identify_hasher, make_password
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 
@@ -152,6 +152,12 @@ class Project(models.Model):
 
 # Таблица пользователей
 class Profile(AbstractUser):
+    email = models.EmailField(_('email address'), unique=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
+
+
     id_status = models.ForeignKey(Status, default=1, on_delete=models.DO_NOTHING,
                                   verbose_name='ID статуса')  # применить
     description = models.CharField(max_length=1024, verbose_name='Описание')  # Описание
@@ -159,6 +165,7 @@ class Profile(AbstractUser):
     stack = models.ManyToManyField(Stack, verbose_name='Стек технологий')  # Список технологий должен
     # rating = models.ForeignKey(Project, on_delete=models.DO_NOTHING)  # Рейтинг
     telephone = models.CharField(max_length=50, verbose_name='Телефон')  # тип номер телефона
+
 
     """
     процедура создания списка стеков, т.к. при соедниении manytomany, мы получаем список записей

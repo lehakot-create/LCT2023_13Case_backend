@@ -154,3 +154,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
 
 ]
+
+DJOSER = {
+    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': False,
+}
