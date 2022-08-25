@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 
+
 # Create your models here.
 
 class Status(models.Model):
@@ -153,6 +154,13 @@ class Project(models.Model):
 # Таблица пользователей
 class Profile(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
+    username = models.CharField(
+        _('username'),
+        max_length=160,
+        blank=True,
+        default="User"
+    )
+
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
