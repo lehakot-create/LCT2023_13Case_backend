@@ -9,7 +9,7 @@ admin.site.register((Status, Stack, TypeProject, Public,
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('username', 'id_status', 'first_name', 'last_name','description',
+    list_display = ('nick_name', 'id_status', 'first_name', 'last_name','description',
                     'img', 'telephone', 'email', 'get_stacks', )
 #
 # @admin.register(Project)

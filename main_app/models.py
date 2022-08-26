@@ -1,3 +1,4 @@
+from django.db.models import Max
 from django.contrib import auth
 from django.contrib.auth.hashers import identify_hasher, make_password
 from django.contrib.auth.models import PermissionsMixin
@@ -170,15 +171,20 @@ class UserManager(BaseUserManager):
         if not password:
             raise ValueError('Необходимо ввести пароль')
         email = self.normalize_email(email)
+
         user = self.model(email=email, **extra_fields)
         user.password = make_password(password)
         user.save(using=self._db)
         return user
 
     def create_user(self, email=None, password=None, **extra_fields):
+        if not extra_fields.get('nick_name'):
+            extra_fields.setdefault('nick_name', self.get_nick_name())
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
         return self._create_user(email, password, **extra_fields)
+
+
 
     def create_superuser(self, email=None, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
@@ -188,8 +194,11 @@ class UserManager(BaseUserManager):
             raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
-
         return self._create_user(email, password, **extra_fields)
+
+    @staticmethod
+    def get_nick_name():
+        return "User" + str(int(Profile.objects.aggregate(Max('pk')).get('pk__max')) + 1)
 
     def with_perm(self, perm, is_active=True, include_superusers=True, backend=None, obj=None):
         if backend is None:
@@ -220,8 +229,10 @@ class UserManager(BaseUserManager):
 
 # Таблица пользователей
 class Profile(AbstractBaseUser, PermissionsMixin):
+
+
     email = models.EmailField(unique=True, max_length=255)
-    nick_name = models.CharField(max_length=255, default="User")
+    nick_name = models.CharField(max_length=255, blank=True)
     first_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)
     is_staff = models.BooleanField(default=False)
@@ -236,8 +247,10 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     # rating = models.ForeignKey(Project, on_delete=models.DO_NOTHING)  # Рейтинг
     telephone = models.CharField(max_length=50, verbose_name='Телефон')  # тип номер телефона
 
+    objects = UserManager()
+
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['nick_name']
 
     def clean(self):
         super().clean()

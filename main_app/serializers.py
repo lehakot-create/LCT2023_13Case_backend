@@ -5,7 +5,7 @@ from .models import Profile, Project
 class ProfileViewSetSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Profile
-        fields = ('url', 'username', 'email', 'is_staff', )
+        fields = ('url', 'nick_name', 'email', 'is_staff', )
 
 class MostPopularProjectsSerializer(serializers.ModelSerializer):
     class Meta:
