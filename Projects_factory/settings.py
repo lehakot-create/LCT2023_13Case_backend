@@ -175,3 +175,5 @@ EMAIL_HOST_USER = 'django.testemail@yandex.ru'
 EMAIL_HOST_PASSWORD = 'cyyvemskxtcoaypy'
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+

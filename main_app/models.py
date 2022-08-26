@@ -153,17 +153,9 @@ class Project(models.Model):
 
 # Таблица пользователей
 class Profile(AbstractUser):
-    email = models.EmailField(_('email address'), unique=True)
-    username = models.CharField(
-        _('username'),
-        max_length=160,
-        blank=True,
-        default="User"
-    )
 
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+
 
 
     id_status = models.ForeignKey(Status, default=1, on_delete=models.DO_NOTHING,
