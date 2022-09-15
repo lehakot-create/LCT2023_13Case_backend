@@ -8,8 +8,8 @@ from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.views import APIView
 
-from .models import Profile, Project
-from .serializers import ProfileViewSetSerializer, MostPopularProjectsSerializer
+from .models import Profile, Project, Stack
+from .serializers import ProfileViewSetSerializer, MostPopularProjectsSerializer, StacksSerializer
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -60,3 +60,7 @@ class ActivateUser(View):
             return HttpResponse("Профиль успешно активирован!")
         else:
             return HttpResponse(response)
+
+class GetStacks(viewsets.ModelViewSet):
+    queryset = Stack.objects.all()
+    serializer_class = StacksSerializer

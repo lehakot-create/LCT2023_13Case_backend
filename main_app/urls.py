@@ -1,11 +1,12 @@
 from django.conf.urls import url
 from django.urls import path, include
 from rest_framework import routers
-from main_app.views import ProfileViewSet, MostPopularProjectsViewSet, ActivateUser
+from main_app.views import ProfileViewSet, MostPopularProjectsViewSet, ActivateUser, GetStacks
 
 router = routers.DefaultRouter()
 router.register(r'v1/profile', ProfileViewSet)
 router.register(r'v1/popular_proj', MostPopularProjectsViewSet)
+router.register(r'v1/stacks', GetStacks)
 
 urlpatterns = [
     path('', include(router.urls)),
