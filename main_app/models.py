@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from django.apps import apps
 from django.utils.translation import gettext_lazy as _
+from django.contrib.postgres.indexes import GinIndex
 
 
 # Create your models here.
@@ -160,6 +161,8 @@ class Project(models.Model):
     class Meta:
         verbose_name = 'проект'
         verbose_name_plural = 'проекты'
+        indexes = [GinIndex(fields=['name'])]
+
 
 
 class UserManager(BaseUserManager):

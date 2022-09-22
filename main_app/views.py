@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView
+from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -86,6 +87,14 @@ class FindProjects(viewsets.ModelViewSet):
     serializer_class = SearchProjectsSerializer
 
     def get_queryset(self):
-        query = self.request.GET.get('q')
+        query = self.request.GET.get('q', '').split()
         if query:
-            return Project.objects.filter(Q(direction__name__icontains=query) | Q(name__icontains=query))
+            search_query = SearchQuery(value='')
+            for q in query:
+                search_query |= SearchQuery(value=q)
+            search_vector = SearchVector('name', 'direction__name')
+
+            # запрос на поиск проекта по ключевым словам в поле name.
+            return Project.objects.annotate(search=search_vector).filter(search=search_query)
+
+
