@@ -87,14 +87,15 @@ class FindProjects(viewsets.ModelViewSet):
     serializer_class = SearchProjectsSerializer
 
     def get_queryset(self):
-        query = self.request.GET.get('q', '').split()
+        query = self.request.GET.get('q')
         if query:
+            query = query.split()
             search_query = SearchQuery(value='')
             for q in query:
                 search_query |= SearchQuery(value=q)
             search_vector = SearchVector('name', 'direction__name')
 
-            # запрос на поиск проекта по ключевым словам в поле name.
+            # запрос на поиск проекта по ключевым словам в поле name и direction.
             return Project.objects.annotate(search=search_vector).filter(search=search_query)
 
 
