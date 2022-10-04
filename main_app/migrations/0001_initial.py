@@ -6,7 +6,7 @@ from django.db import migrations, models
 import django.db.models.deletion
 import django.utils.timezone
 import main_app.models
-from django.contrib.postgres.operations import BtreeGinExtension, BtreeGistExtension
+from django.contrib.postgres.operations import BtreeGinExtension
 
 class Migration(migrations.Migration):
 

@@ -1,7 +1,7 @@
 http://127.0.0.1:8000/api/v1/auth/users/ - POST запрос создает пользователя
 JSON request:
 {
-	"username": "some_name",
+	"email": "some_name",
 	"password": "some_pass"
 }
 
@@ -10,7 +10,7 @@ http://127.0.0.1:8000/api/v1/auth/token/login/ - вход пользоватля
 
 JSON request:
 {
-	"username": "some_name",
+	"email": "some_name",
 	"password": "some_pass"
 }
 
@@ -35,3 +35,20 @@ http://127.0.0.1:8000/api/v1/search/ - поиск проектов по назв
 			"deadline":"2022-07-28"
 		},
 	]
+
+
+http://127.0.0.1:8000/api/v1/project/  :
+
+POST запрос создает новый проект. Только для авторизованных пользователей.
+В JSON нужно указать:
+
+Headers:
+"Authorization": "Token 740ffd4612e03a6ff62aadfdfa5535adbcb444b8"
+
+{
+    "name": "Новый проект",
+    "description": "Описание нового проекта",
+    "colour": "красный"
+}
+
+GET запрос возвращает наименование, описание и цвет проекта по его id (http://127.0.0.1:8000/api/v1/project/?id=1)

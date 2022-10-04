@@ -3,12 +3,14 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import get_object_or_404, ListCreateAPIView
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -17,7 +19,8 @@ from .serializers import (
     ProfileViewSetSerializer,
     MostPopularProjectsSerializer,
     StacksSerializer,
-    SearchProjectsSerializer
+    SearchProjectsSerializer,
+    GetProjectSerializer
 )
 
 
@@ -97,5 +100,28 @@ class FindProjects(viewsets.ModelViewSet):
 
             # запрос на поиск проекта по ключевым словам в поле name и direction.
             return Project.objects.annotate(search=search_vector).filter(search=search_query)
+
+
+
+
+#@csrf_exempt # удалить декоратор
+class CreateProjectApiView(ListCreateAPIView):
+    '''
+    Представление возвращает наименование, описание, id и цвет по проекту
+    '''
+
+    queryset = Project.objects.all()
+    serializer_class = GetProjectSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def get_queryset(self):
+        id = self.request.GET.get('id')
+        if id:
+            return Project.objects.filter(pk = int(id))
+        return Project.objects.all()
+
 
 

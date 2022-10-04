@@ -34,8 +34,11 @@ class Status(models.Model):
         verbose_name_plural = 'статусы'
 
 
-# Таблица с технологиями
 class Stack(models.Model):
+    '''
+    Таблица с технологиями
+    '''
+
     name = models.CharField(max_length=64, verbose_name='Стек технологий')
 
     def __str__(self):
@@ -46,8 +49,11 @@ class Stack(models.Model):
         verbose_name_plural = 'стек технологий'
 
 
-# Тип проекта - коммерческий/некоммерческий
 class TypeProject(models.Model):
+    '''
+    Тип проекта - коммерческий/некоммерческий
+    '''
+
     PROJECT_TYPES = (
         (1, 'Commercial'),
         (2, 'Non commercial'),
@@ -65,8 +71,11 @@ class TypeProject(models.Model):
         verbose_name_plural = 'типы проектов'
 
 
-# Тип проекта - открытый/закрытый
 class Public(models.Model):
+    '''
+    Тип проекта - открытый/закрытый
+    '''
+
     TYPES = (
         (1, 'Open'),
         (2, 'Close'),
@@ -83,9 +92,11 @@ class Public(models.Model):
         verbose_name_plural = 'доступность проекта'
 
 
-# Направление проекта (разработка, тестирование, анализ и т.д.)
 class Direction(models.Model):
-    name = models.CharField(max_length=64, verbose_name='Направление проекта')
+    '''
+    Направление проекта (разработка, тестирование, анализ и т.д.)
+    '''
+    name = models.TextField(verbose_name='Направление проекта')
 
     def __str__(self):
         return self.name
@@ -95,8 +106,11 @@ class Direction(models.Model):
         verbose_name_plural = 'направления проектов'
 
 
-# Тариф
 class Rate(models.Model):
+    '''
+    Тариф
+    '''
+
     RATE_TYPES = (
         (1, 'Tarif 1'),
         (2, 'Tarif 2'),
@@ -114,8 +128,10 @@ class Rate(models.Model):
         verbose_name_plural = 'тарифы'
 
 
-# Стадии проекта
 class Stage(models.Model):
+    '''
+    Стадии проекта
+    '''
     stage = models.JSONField()
 
     def __str__(self):
@@ -126,23 +142,27 @@ class Stage(models.Model):
         verbose_name_plural = 'стадии проектов'
 
 
-# Таблица проектов
 class Project(models.Model):
-    id_project_type = models.ForeignKey(TypeProject, on_delete=models.DO_NOTHING, verbose_name='Тип проекта')
+    '''
+    Таблица проектов
+    '''
+    id_project_type = models.ForeignKey(TypeProject, on_delete=models.DO_NOTHING, verbose_name='Тип проекта', default=2)
     name = models.CharField(max_length=128, verbose_name='Название проекта')
     id_type = models.ForeignKey(Public, on_delete=models.DO_NOTHING,
-                                verbose_name='Доступность проекта')  # Тип проекта (открытый/закрытый)
+                                verbose_name='Доступность проекта', default=1)  # Тип проекта (открытый/закрытый)
     # author = models.ForeignKey(Users, on_delete=models.DO_NOTHING)
     members_limit = models.IntegerField(validators=[MinValueValidator(1)],
-                                        verbose_name='Максимальное количество участников')  # Максимальное количество участников
+                                        verbose_name='Максимальное количество участников', default=1)  # Максимальное количество участников
     members = models.ManyToManyField('Profile',
-                                     verbose_name='Список участников')  # Список участников. Получаем список всех участников проекта
-    direction = models.ForeignKey(Direction, on_delete=models.CASCADE, verbose_name='Направление проекта')
-    deadline = models.DateField(verbose_name='Срок окончания проекта')  # срок окончания проекта
-    id_rate = models.ForeignKey(Rate, on_delete=models.DO_NOTHING, verbose_name='Тариф')  # тариф
+                                     verbose_name='Список участников', blank=True)  # Список участников. Получаем список всех участников проекта
+    # direction = models.ForeignKey(Direction, on_delete=models.CASCADE, verbose_name='Направление проекта')
+    description = models.TextField(verbose_name='Описание проекта', default='Описание проекта')
+    deadline = models.DateField(verbose_name='Срок окончания проекта', blank=True, null=True)  # срок окончания проекта
+    id_rate = models.ForeignKey(Rate, on_delete=models.DO_NOTHING, verbose_name='Тариф', default=1)  # тариф
     id_stage = models.ForeignKey(Stage, on_delete=models.DO_NOTHING, null=True, blank=True,
                                  verbose_name='Стадия проекта')
-    rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], verbose_name='Рейтинг')
+    rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], verbose_name='Рейтинг', default=100)
+    colour = models.CharField(max_length=20, default='green')
 
     # def set_rating(self, rate):
     #     try:
@@ -164,8 +184,11 @@ class Project(models.Model):
         indexes = [GinIndex(fields=['name'])]
 
 
-
 class UserManager(BaseUserManager):
+    '''
+    Переопределение модели UserManager.
+    Регистрация по email
+    '''
     use_in_migrations = True
 
     def _create_user(self, email=None, password=None, **extra_fields):
@@ -186,8 +209,6 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
         return self._create_user(email, password, **extra_fields)
-
-
 
     def create_superuser(self, email=None, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
@@ -230,9 +251,10 @@ class UserManager(BaseUserManager):
         return self.none()
 
 
-# Таблица пользователей
 class Profile(AbstractBaseUser, PermissionsMixin):
-
+    '''
+    Таблица пользователей
+    '''
 
     email = models.EmailField(unique=True, max_length=255)
     nick_name = models.CharField(max_length=255, blank=True)
@@ -274,9 +296,9 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
-    """
+    '''
     процедура создания списка стеков, т.к. при соедниении manytomany, мы получаем список записей
-    """
+    '''
 
     def get_stacks(self):
         return ' '.join([str(s) for s in self.stack.all()])
@@ -287,4 +309,3 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = 'профиль'
         verbose_name_plural = 'профили пользователей'
-    # нужно добавить две функции чтобы создавался профиль пользователя при создании юзера. Это если первый путь выберешь
