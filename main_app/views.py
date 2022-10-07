@@ -14,13 +14,14 @@ from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAu
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Profile, Project, Stack
+from .models import Profile, Project, Stack, Task
 from .serializers import (
     ProfileViewSetSerializer,
     MostPopularProjectsSerializer,
     StacksSerializer,
     SearchProjectsSerializer,
-    GetProjectSerializer
+    GetProjectSerializer,
+    GetTasksSerializer
 )
 
 
@@ -124,4 +125,26 @@ class CreateProjectApiView(ListCreateAPIView):
         return Project.objects.all()
 
 
+class CreateTaskApiView(ListCreateAPIView):
 
+    queryset = Task.objects.all()
+    serializer_class = GetTasksSerializer
+    # permission_classes = (AllowAny)
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def get_queryset(self):
+        id = self.request.GET.get('id')
+        if id:
+            return Task.objects.filter(pk=int(id))
+        return Task.objects.all()
+
+    # def post(self, request, *args, **kwargs):
+    #     profiles = request.data.get('id')
+    #     profiles = request.data.get('status')
+    #     profiles = request.data.get('description')
+    #     profiles = request.data.get('description')
+    #     profiles = request.data.get('project')
+    #
+    #     return self.create(request, *profiles, *args, **kwargs)

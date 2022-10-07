@@ -150,6 +150,7 @@ class Project(models.Model):
     name = models.CharField(max_length=128, verbose_name='Название проекта')
     id_type = models.ForeignKey(Public, on_delete=models.DO_NOTHING,
                                 verbose_name='Доступность проекта', default=1)  # Тип проекта (открытый/закрытый)
+
     # author = models.ForeignKey(Users, on_delete=models.DO_NOTHING)
     members_limit = models.IntegerField(validators=[MinValueValidator(1)],
                                         verbose_name='Максимальное количество участников', default=1)  # Максимальное количество участников
@@ -304,8 +305,31 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         return ' '.join([str(s) for s in self.stack.all()])
 
     def __str__(self):
-        return self.email
+        return self.nick_name
 
     class Meta:
         verbose_name = 'профиль'
         verbose_name_plural = 'профили пользователей'
+
+class Task(models.Model):
+    """
+    Статусы задач
+    """
+    STATUSES = (
+        (1, 'нужно сделать'),
+        (2, 'в процессе'),
+        (3, 'готово'),
+        (4, 'архив'),
+    )
+
+    status = models.IntegerField(choices=STATUSES, default=1)
+    description = models.CharField(max_length=255, default='Описание задачи')
+    profile = models.ManyToManyField(Profile)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+
+    def get_profiles(self):
+        return ' '.join([str(p) for p in self.profile.all()])
+
+    def __str__(self):
+        return self.description
+
