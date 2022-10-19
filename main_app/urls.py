@@ -8,6 +8,7 @@ from main_app.views import (ProfileViewSet,
                             FindProjects,
                             CreateProjectApiView,
                             CreateTaskApiView,
+                            GetUserProjets,
                             )
 
 router = routers.DefaultRouter()
@@ -22,6 +23,7 @@ urlpatterns = [
     path('v1/api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('v1/project/', CreateProjectApiView.as_view()),
     path('v1/tasks/', CreateTaskApiView.as_view()),
+    path('v1/user-projects/', GetUserProjets.as_view()),
     url(r'^v1/auth/', include('djoser.urls')),
     url(r'^v1/auth/', include('djoser.urls.authtoken')),
 ]

@@ -39,16 +39,18 @@ class GetProjectSerializer(serializers.ModelSerializer):
         return Project.objects.create(**validated_data)
 
 
-class ProfileViewSetSerializer(serializers.HyperlinkedModelSerializer):
+class ProfileViewSetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ('id','nick_name')
+        fields = ('id','nick_name', 'email')
+        # fields = "__all__"
 class GetTasksSerializer(serializers.ModelSerializer):
     profile = ProfileViewSetSerializer(many=True)
 
     class Meta:
         model = Task
         fields = ('id', 'status', 'description', 'profile', 'project')
+
 
     def create(self, validated_data):
         status = validated_data.__getitem__('status')
@@ -63,3 +65,4 @@ class GetTasksSerializer(serializers.ModelSerializer):
         newTask.profile.set(profile_list)
         newTask.save()
         return newTask
+

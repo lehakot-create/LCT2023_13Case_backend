@@ -9,7 +9,7 @@ from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.generics import get_object_or_404, ListCreateAPIView
+from rest_framework.generics import get_object_or_404, ListCreateAPIView, ListAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -21,7 +21,7 @@ from .serializers import (
     StacksSerializer,
     SearchProjectsSerializer,
     GetProjectSerializer,
-    GetTasksSerializer
+    GetTasksSerializer,
 )
 
 
@@ -103,9 +103,7 @@ class FindProjects(viewsets.ModelViewSet):
             return Project.objects.annotate(search=search_vector).filter(search=search_query)
 
 
-
-
-#@csrf_exempt # удалить декоратор
+# @csrf_exempt # удалить декоратор
 class CreateProjectApiView(ListCreateAPIView):
     '''
     Представление возвращает наименование, описание, id и цвет по проекту
@@ -121,15 +119,15 @@ class CreateProjectApiView(ListCreateAPIView):
     def get_queryset(self):
         id = self.request.GET.get('id')
         if id:
-            return Project.objects.filter(pk = int(id))
+            return Project.objects.filter(pk=int(id))
         return Project.objects.all()
 
 
 class CreateTaskApiView(ListCreateAPIView):
-
     queryset = Task.objects.all()
     serializer_class = GetTasksSerializer
-    # permission_classes = (AllowAny)
+
+    # permission_classes = (AllowAny)Project.objects.values_list('members')alues_list('members')
 
     def perform_create(self, serializer):
         serializer.save()
@@ -140,11 +138,18 @@ class CreateTaskApiView(ListCreateAPIView):
             return Task.objects.filter(pk=int(id))
         return Task.objects.all()
 
-    # def post(self, request, *args, **kwargs):
-    #     profiles = request.data.get('id')
-    #     profiles = request.data.get('status')
-    #     profiles = request.data.get('description')
-    #     profiles = request.data.get('description')
-    #     profiles = request.data.get('project')
-    #
-    #     return self.create(request, *profiles, *args, **kwargs)
+
+class GetUserProjets(ListAPIView):
+    queryset = Project.objects.all()
+    serializer_class = GetProjectSerializer
+
+    def get_queryset(self):
+        # Получил из запроса id пользователя по токену
+        user_id = str(self.request.user.id)
+        # Создал объект пользователя по полученному id
+        user = Profile.objects.get(pk=user_id)
+        # profile_project - это промежуточная таблица (название указано в related_name)
+        # у объекта получаю список всех проектов через промежуточную таблицу
+        return user.profile_project.all()
+
+

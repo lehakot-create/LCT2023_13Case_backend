@@ -154,8 +154,8 @@ class Project(models.Model):
     # author = models.ForeignKey(Users, on_delete=models.DO_NOTHING)
     members_limit = models.IntegerField(validators=[MinValueValidator(1)],
                                         verbose_name='Максимальное количество участников', default=1)  # Максимальное количество участников
-    members = models.ManyToManyField('Profile',
-                                     verbose_name='Список участников', blank=True)  # Список участников. Получаем список всех участников проекта
+    profile = models.ManyToManyField('Profile',
+                                     verbose_name='Список участников', blank=True, related_name='profile_project')  # Список участников. Получаем список всех участников проекта
     # direction = models.ForeignKey(Direction, on_delete=models.CASCADE, verbose_name='Направление проекта')
     description = models.TextField(verbose_name='Описание проекта', default='Описание проекта')
     deadline = models.DateField(verbose_name='Срок окончания проекта', blank=True, null=True)  # срок окончания проекта
