@@ -124,6 +124,9 @@ class CreateProjectApiView(ListCreateAPIView):
 
 
 class CreateTaskApiView(ListCreateAPIView):
+    '''
+    Представление возвращает наименование, описание и цвет проекта по его id
+    '''
     queryset = Task.objects.all()
     serializer_class = GetTasksSerializer
 
@@ -140,6 +143,10 @@ class CreateTaskApiView(ListCreateAPIView):
 
 
 class GetUserProjets(ListAPIView):
+    '''
+    Представление возвращает список всех проектов пользователя:
+    id, name, description, colour
+    '''
     queryset = Project.objects.all()
     serializer_class = GetProjectSerializer
 

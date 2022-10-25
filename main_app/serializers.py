@@ -33,11 +33,16 @@ class GetProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('id','name', 'description', 'colour')
+        fields = ('id','name', 'description', 'colour', 'profile')
 
     def create(self, validated_data):
-        return Project.objects.create(**validated_data)
-
+        user_list = []
+        user_list.append(self.context['request'].auth.user_id)
+        new_project = Project(**validated_data)
+        new_project.save()
+        new_project.profile.set(user_list)
+        new_project.save()
+        return new_project
 
 class ProfileViewSetSerializer(serializers.ModelSerializer):
     class Meta:
