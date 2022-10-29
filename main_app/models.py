@@ -1,19 +1,15 @@
 from django.db.models import Max
 from django.contrib import auth
-from django.contrib.auth.hashers import identify_hasher, make_password
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import PermissionsMixin
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-# from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.utils import timezone
 from django.core.mail import send_mail
-from django.apps import apps
 from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.indexes import GinIndex
 
-
-# Create your models here.
 
 class Status(models.Model):
     STATUSES = (
@@ -35,9 +31,9 @@ class Status(models.Model):
 
 
 class Stack(models.Model):
-    '''
+    """
     Таблица с технологиями
-    '''
+    """
 
     name = models.CharField(max_length=64, verbose_name='Стек технологий')
 
@@ -50,9 +46,9 @@ class Stack(models.Model):
 
 
 class TypeProject(models.Model):
-    '''
+    """
     Тип проекта - коммерческий/некоммерческий
-    '''
+    """
 
     PROJECT_TYPES = (
         (1, 'Commercial'),
@@ -72,9 +68,9 @@ class TypeProject(models.Model):
 
 
 class Public(models.Model):
-    '''
+    """
     Тип проекта - открытый/закрытый
-    '''
+    """
 
     TYPES = (
         (1, 'Open'),
@@ -93,9 +89,9 @@ class Public(models.Model):
 
 
 class Direction(models.Model):
-    '''
+    """
     Направление проекта (разработка, тестирование, анализ и т.д.)
-    '''
+    """
     name = models.TextField(verbose_name='Направление проекта')
 
     def __str__(self):
@@ -107,9 +103,9 @@ class Direction(models.Model):
 
 
 class Rate(models.Model):
-    '''
+    """
     Тариф
-    '''
+    """
 
     RATE_TYPES = (
         (1, 'Tarif 1'),
@@ -129,9 +125,9 @@ class Rate(models.Model):
 
 
 class Stage(models.Model):
-    '''
+    """
     Стадии проекта
-    '''
+    """
     stage = models.JSONField()
 
     def __str__(self):
@@ -143,9 +139,9 @@ class Stage(models.Model):
 
 
 class Project(models.Model):
-    '''
+    """
     Таблица проектов
-    '''
+    """
     id_project_type = models.ForeignKey(TypeProject, on_delete=models.DO_NOTHING, verbose_name='Тип проекта', default=2)
     name = models.CharField(max_length=128, verbose_name='Название проекта')
     id_type = models.ForeignKey(Public, on_delete=models.DO_NOTHING,
@@ -186,10 +182,10 @@ class Project(models.Model):
 
 
 class UserManager(BaseUserManager):
-    '''
+    """
     Переопределение модели UserManager.
     Регистрация по email
-    '''
+    """
     use_in_migrations = True
 
     def _create_user(self, email=None, password=None, **extra_fields):
@@ -253,9 +249,9 @@ class UserManager(BaseUserManager):
 
 
 class Profile(AbstractBaseUser, PermissionsMixin):
-    '''
+    """
     Таблица пользователей
-    '''
+    """
 
     email = models.EmailField(unique=True, max_length=255)
     nick_name = models.CharField(max_length=255, blank=True)
@@ -311,6 +307,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         verbose_name = 'профиль'
         verbose_name_plural = 'профили пользователей'
 
+
 class Task(models.Model):
     """
     Статусы задач
@@ -332,4 +329,3 @@ class Task(models.Model):
 
     def __str__(self):
         return self.description
-
