@@ -65,7 +65,6 @@ class ActivateUser(View):
     """
     Класс активации юзера по ссылке, полученной на email
     """
-
     def get(self, request, uid, token):
         payload = {'uid': uid, 'token': token}
         url = "http://localhost:8000/api/v1/auth/users/activation/"
@@ -143,7 +142,7 @@ class CreateTaskApiView(ListCreateAPIView):
         return Task.objects.all()
 
 
-class GetUserProjets(ListAPIView):
+class GetUserProjects(ListAPIView):
     """
     Представление возвращает список всех проектов пользователя:
     id, name, description, colour

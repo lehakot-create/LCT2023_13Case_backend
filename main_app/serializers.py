@@ -45,7 +45,7 @@ class GetProjectSerializer(serializers.ModelSerializer):
 class ProfileViewSetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ('id','nick_name', 'email')
+        fields = ('id', 'nick_name', 'email', 'role')
         # fields = "__all__"
 
 

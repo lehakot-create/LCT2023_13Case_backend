@@ -252,13 +252,22 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     """
     Таблица пользователей
     """
-
     email = models.EmailField(unique=True, max_length=255)
     nick_name = models.CharField(max_length=255, blank=True)
     first_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    user = 'US'
+    company = 'CO'
+    moderator = "MO"
+    choice = [
+        (user, 'Пользователь'),
+        (company, 'Производитель'),
+        (moderator, 'Модератор')
+    ]
+    role = models.CharField(max_length=2, choices=choice, default=user)
+
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 
     id_status = models.ForeignKey(Status, default=1, on_delete=models.DO_NOTHING,
@@ -332,4 +341,11 @@ class Task(models.Model):
 
 
 class Profession(models.Model):
+    """
+    Таблица профессий
+    """
     name = models.CharField(max_length=128, null=True, verbose_name="Профессия")
+
+
+class Idea(models.Model):
+    pass
