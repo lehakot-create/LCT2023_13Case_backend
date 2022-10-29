@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Profile, Project, Stack, Task
+from .models import Profile, Project, Stack, Task, Profession
 
 
 class MostPopularProjectsSerializer(serializers.HyperlinkedModelSerializer):
@@ -31,7 +31,7 @@ class GetProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('id','name', 'description', 'colour', 'profile')
+        fields = ('id', 'name', 'description', 'colour', 'profile')
 
     def create(self, validated_data):
         user_list = [self.context['request'].auth.user_id]
@@ -69,3 +69,9 @@ class GetTasksSerializer(serializers.ModelSerializer):
         newTask.profile.set(profile_list)
         newTask.save()
         return newTask
+
+
+class ProfessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profession
+        fields = "__all__"

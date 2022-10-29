@@ -329,3 +329,7 @@ class Task(models.Model):
 
     def __str__(self):
         return self.description
+
+
+class Profession(models.Model):
+    name = models.CharField(max_length=128, null=True, verbose_name="Профессия")

@@ -1,0 +1,5 @@
+[{"model": "main_app.profession", "pk": 1, "fields": {"name": "BI разработчик (BI архитектор)"}},
+  {"model": "main_app.profession", "pk": 2, "fields": {"name": "Big Data Analyst: специалист по анализу больших данных"}},
+  {"model": "main_app.profession", "pk": 2, "fields": {"name": "Big Data Analyst: специалист по анализу больших данных"}}
+
+]

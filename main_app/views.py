@@ -14,7 +14,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAu
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Profile, Project, Stack, Task
+from .models import Profile, Project, Stack, Task, Profession
 from .serializers import (
     ProfileViewSetSerializer,
     MostPopularProjectsSerializer,
@@ -22,6 +22,7 @@ from .serializers import (
     SearchProjectsSerializer,
     GetProjectSerializer,
     GetTasksSerializer,
+    ProfessionSerializer,
 )
 
 
@@ -61,9 +62,9 @@ class MostPopularProjectsViewSet(viewsets.ModelViewSet):
 
 
 class ActivateUser(View):
-    '''
+    """
     Класс активации юзера по ссылке, полученной на email
-    '''
+    """
 
     def get(self, request, uid, token):
         payload = {'uid': uid, 'token': token}
@@ -76,17 +77,17 @@ class ActivateUser(View):
 
 
 class GetStacks(viewsets.ModelViewSet):
-    '''
+    """
     Представление возвращает список всех стеков из базы данных
-    '''
+    """
     queryset = Stack.objects.all()
     serializer_class = StacksSerializer
 
 
 class FindProjects(viewsets.ModelViewSet):
-    '''
+    """
     Представление возвращает результат поиска по полям direction (описание проекта) и name (название проекта)
-    '''
+    """
     queryset = Project.objects.all()
     serializer_class = SearchProjectsSerializer
 
@@ -105,9 +106,9 @@ class FindProjects(viewsets.ModelViewSet):
 
 # @csrf_exempt # удалить декоратор
 class CreateProjectApiView(ListCreateAPIView):
-    '''
+    """
     Представление возвращает наименование, описание, id и цвет по проекту
-    '''
+    """
 
     queryset = Project.objects.all()
     serializer_class = GetProjectSerializer
@@ -124,9 +125,9 @@ class CreateProjectApiView(ListCreateAPIView):
 
 
 class CreateTaskApiView(ListCreateAPIView):
-    '''
+    """
     Представление возвращает наименование, описание и цвет проекта по его id
-    '''
+    """
     queryset = Task.objects.all()
     serializer_class = GetTasksSerializer
 
@@ -143,10 +144,10 @@ class CreateTaskApiView(ListCreateAPIView):
 
 
 class GetUserProjets(ListAPIView):
-    '''
+    """
     Представление возвращает список всех проектов пользователя:
     id, name, description, colour
-    '''
+    """
     queryset = Project.objects.all()
     serializer_class = GetProjectSerializer
 
@@ -160,3 +161,6 @@ class GetUserProjets(ListAPIView):
         return user.profile_project.all()
 
 
+class ProfessionView(viewsets.ModelViewSet):
+    queryset = Profession.objects.all()
+    serializer_class = ProfessionSerializer
