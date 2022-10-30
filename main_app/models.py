@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.indexes import GinIndex
+from django.contrib.postgres.fields import ArrayField
 
 
 class Status(models.Model):
@@ -259,7 +260,6 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     user = 'US'
-    company = 'CO'
     moderator = "MO"
     choice = [
         (user, 'Пользователь'),
@@ -346,5 +346,14 @@ class Profession(models.Model):
     name = models.CharField(max_length=128, null=True, verbose_name="Профессия")
 
 
+class Comment(models.Model):
+    author = models.ForeignKey('Profile', on_delete=models.DO_NOTHING)
+    date_create = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()
+    idea = models.ForeignKey('Idea', on_delete=models.DO_NOTHING)
+
+
 class Idea(models.Model):
-    pass
+    name = models.CharField(max_length=128, null=True)
+    description = models.CharField(max_length=512, null=True)
+    stack = models.ManyToManyField('Stack')
