@@ -68,22 +68,22 @@ class ActivateUser(View):
     """
     template_name = "email/activation.html"
 
-    # def get_context_data(self):
-    #     context = super().get_context_data()
-    #
-    #     context['site_name'] = "Портал инноваций"
-    #     context['protocol'] = 'http'
-    #     context['domain'] = '0.0.0.0:8000'
-    #     context['url'] = settings.ACTIVATION_URL.format(**context)
-    #     return context
+    def get_context_data(self):
+        context = super().get_context_data()
+
+        context['site_name'] = "Портал инноваций"
+        context['protocol'] = 'http'
+        context['domain'] = '0.0.0.0:8000'
+        context['url'] = settings.ACTIVATION_URL.format(**context)
+        return context
 
     def get(self, request, uid, token):
         payload = {'uid': uid, 'token': token}
         url = "http://localhost:8000/api/v1/auth/users/activation/"
         response = requests.post(url, data=payload)
         if response.status_code == 204:
-            return HttpResponse("Профиль успешно активирован!")
-            # return render(request, "activation.html")
+            # return HttpResponse("Профиль успешно активирован!")
+            return render(request, "email/activation_complete.html")
         else:
             return HttpResponse(response)
 

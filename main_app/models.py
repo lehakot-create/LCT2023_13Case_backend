@@ -263,8 +263,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     moderator = "MO"
     choice = [
         (user, 'Пользователь'),
-        (company, 'Производитель'),
-        (moderator, 'Модератор')
+        (moderator, 'Администратор')
     ]
     role = models.CharField(max_length=2, choices=choice, default=user)
 
