@@ -11,7 +11,7 @@ class MostPopularProjectsSerializer(serializers.HyperlinkedModelSerializer):
 class StacksSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Stack
-        fields = ('name',)
+        fields = ('id', 'name',)
 
 
 class SearchProjectsSerializer(serializers.ModelSerializer):
