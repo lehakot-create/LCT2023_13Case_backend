@@ -15,14 +15,14 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from djoser.conf import settings
 
-from .models import Profile, Project, Stack, Task, Profession, Country
+from .models import Profile, Project, Stack, Profession, Country
 from .serializers import (
     ProfileViewSetSerializer,
     MostPopularProjectsSerializer,
     StacksSerializer,
     SearchProjectsSerializer,
     GetProjectSerializer,
-    GetTasksSerializer,
+    # GetTasksSerializer,
     ProfessionSerializer, CountrySerializer,
 )
 
@@ -48,18 +48,18 @@ class ProfileViewSet(viewsets.ModelViewSet):
     #     return Response({'popular_proj': [{'name': p.name, 'rating': p.rating} for p in popular_proj]})
 
 
-class MostPopularProjectsViewSet(viewsets.ModelViewSet):
-    """
-    Представление возвращает json ответ с 3-мя популярными проектами
-
-    Возвращает json ответ по адресу http://127.0.0.1:8000/api/popular_proj/
-    """
-
-    queryset = Project.objects.all()
-    serializer_class = MostPopularProjectsSerializer
-
-    def get_queryset(self):
-        return Project.objects.order_by('-rating')[:3]
+# class MostPopularProjectsViewSet(viewsets.ModelViewSet):
+#     """
+#     Представление возвращает json ответ с 3-мя популярными проектами
+#
+#     Возвращает json ответ по адресу http://127.0.0.1:8000/api/popular_proj/
+#     """
+#
+#     queryset = Project.objects.all()
+#     serializer_class = MostPopularProjectsSerializer
+#
+#     def get_queryset(self):
+#         return Project.objects.order_by('-rating')[:3]
 
 
 class ActivateUser(View):
@@ -136,23 +136,23 @@ class CreateProjectApiView(ListCreateAPIView):
         return Project.objects.all()
 
 
-class CreateTaskApiView(ListCreateAPIView):
-    """
-    Представление возвращает наименование, описание и цвет проекта по его id
-    """
-    queryset = Task.objects.all()
-    serializer_class = GetTasksSerializer
-
-    # permission_classes = (AllowAny)Project.objects.values_list('members')alues_list('members')
-
-    def perform_create(self, serializer):
-        serializer.save()
-
-    def get_queryset(self):
-        id = self.request.GET.get('id')
-        if id:
-            return Task.objects.filter(pk=int(id))
-        return Task.objects.all()
+# class CreateTaskApiView(ListCreateAPIView):
+#     """
+#     Представление возвращает наименование, описание и цвет проекта по его id
+#     """
+#     queryset = Task.objects.all()
+#     serializer_class = GetTasksSerializer
+#
+#     # permission_classes = (AllowAny)Project.objects.values_list('members')alues_list('members')
+#
+#     def perform_create(self, serializer):
+#         serializer.save()
+#
+#     def get_queryset(self):
+#         id = self.request.GET.get('id')
+#         if id:
+#             return Task.objects.filter(pk=int(id))
+#         return Task.objects.all()
 
 
 class GetUserProjects(ListAPIView):

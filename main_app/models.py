@@ -12,23 +12,23 @@ from django.contrib.postgres.indexes import GinIndex
 from django.contrib.postgres.fields import ArrayField
 
 
-class Status(models.Model):
-    STATUSES = (
-        (1, 'Phisical'),
-        (2, 'Legal'),
-    )
-
-    status = models.PositiveIntegerField(choices=STATUSES, default=1,
-                                         verbose_name='Статус - физическое/юридическое лицо')  # статус
-
-    def __str__(self):
-        for el in Status.STATUSES:
-            if el[0] == self.status:
-                return el[1]
-
-    class Meta:
-        verbose_name = 'статус'
-        verbose_name_plural = 'статусы'
+# class Status(models.Model):
+#     STATUSES = (
+#         (1, 'Phisical'),
+#         (2, 'Legal'),
+#     )
+#
+#     status = models.PositiveIntegerField(choices=STATUSES, default=1,
+#                                          verbose_name='Статус - физическое/юридическое лицо')  # статус
+#
+#     def __str__(self):
+#         for el in Status.STATUSES:
+#             if el[0] == self.status:
+#                 return el[1]
+#
+#     class Meta:
+#         verbose_name = 'статус'
+#         verbose_name_plural = 'статусы'
 
 
 class Stack(models.Model):
@@ -89,54 +89,54 @@ class Public(models.Model):
         verbose_name_plural = 'доступность проекта'
 
 
-class Direction(models.Model):
-    """
-    Направление проекта (разработка, тестирование, анализ и т.д.)
-    """
-    name = models.TextField(verbose_name='Направление проекта')
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'направление проекта'
-        verbose_name_plural = 'направления проектов'
-
-
-class Rate(models.Model):
-    """
-    Тариф
-    """
-
-    RATE_TYPES = (
-        (1, 'Tarif 1'),
-        (2, 'Tarif 2'),
-        (3, 'Tarif 3'),
-    )
-    description = models.PositiveIntegerField(choices=RATE_TYPES, default=1, verbose_name='Тариф')
-
-    def __str__(self):
-        for el in Rate.RATE_TYPES:
-            if el[0] == self.description:
-                return el[1]
-
-    class Meta:
-        verbose_name = 'тариф'
-        verbose_name_plural = 'тарифы'
+# class Direction(models.Model):
+#     """
+#     Направление проекта (разработка, тестирование, анализ и т.д.)
+#     """
+#     name = models.TextField(verbose_name='Направление проекта')
+#
+#     def __str__(self):
+#         return self.name
+#
+#     class Meta:
+#         verbose_name = 'направление проекта'
+#         verbose_name_plural = 'направления проектов'
 
 
-class Stage(models.Model):
-    """
-    Стадии проекта
-    """
-    stage = models.JSONField()
+# class Rate(models.Model):
+#     """
+#     Тариф
+#     """
+#
+#     RATE_TYPES = (
+#         (1, 'Tarif 1'),
+#         (2, 'Tarif 2'),
+#         (3, 'Tarif 3'),
+#     )
+#     description = models.PositiveIntegerField(choices=RATE_TYPES, default=1, verbose_name='Тариф')
+#
+#     def __str__(self):
+#         for el in Rate.RATE_TYPES:
+#             if el[0] == self.description:
+#                 return el[1]
+#
+#     class Meta:
+#         verbose_name = 'тариф'
+#         verbose_name_plural = 'тарифы'
 
-    def __str__(self):
-        return self.stage
 
-    class Meta:
-        verbose_name = 'стадия проекта'
-        verbose_name_plural = 'стадии проектов'
+# class Stage(models.Model):
+#     """
+#     Стадии проекта
+#     """
+#     stage = models.JSONField()
+#
+#     def __str__(self):
+#         return self.stage
+#
+#     class Meta:
+#         verbose_name = 'стадия проекта'
+#         verbose_name_plural = 'стадии проектов'
 
 
 class Project(models.Model):
@@ -156,9 +156,9 @@ class Project(models.Model):
     # direction = models.ForeignKey(Direction, on_delete=models.CASCADE, verbose_name='Направление проекта')
     description = models.TextField(verbose_name='Описание проекта', default='Описание проекта')
     deadline = models.DateField(verbose_name='Срок окончания проекта', blank=True, null=True)  # срок окончания проекта
-    id_rate = models.ForeignKey(Rate, on_delete=models.DO_NOTHING, verbose_name='Тариф', default=1)  # тариф
-    id_stage = models.ForeignKey(Stage, on_delete=models.DO_NOTHING, null=True, blank=True,
-                                 verbose_name='Стадия проекта')
+    # id_rate = models.ForeignKey(Rate, on_delete=models.DO_NOTHING, verbose_name='Тариф', default=1)  # тариф
+    # id_stage = models.ForeignKey(Stage, on_delete=models.DO_NOTHING, null=True, blank=True,
+    #                              verbose_name='Стадия проекта')
     rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], verbose_name='Рейтинг', default=100)
     colour = models.CharField(max_length=20, default='green')
 
@@ -332,27 +332,27 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'профили пользователей'
 
 
-class Task(models.Model):
-    """
-    Статусы задач
-    """
-    STATUSES = (
-        (1, 'нужно сделать'),
-        (2, 'в процессе'),
-        (3, 'готово'),
-        (4, 'архив'),
-    )
-
-    status = models.IntegerField(choices=STATUSES, default=1)
-    description = models.CharField(max_length=255, default='Описание задачи')
-    profile = models.ManyToManyField(Profile)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-
-    def get_profiles(self):
-        return ' '.join([str(p) for p in self.profile.all()])
-
-    def __str__(self):
-        return self.description
+# class Task(models.Model):
+#     """
+#     Статусы задач
+#     """
+#     STATUSES = (
+#         (1, 'нужно сделать'),
+#         (2, 'в процессе'),
+#         (3, 'готово'),
+#         (4, 'архив'),
+#     )
+#
+#     status = models.IntegerField(choices=STATUSES, default=1)
+#     description = models.CharField(max_length=255, default='Описание задачи')
+#     profile = models.ManyToManyField(Profile)
+#     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+#
+#     def get_profiles(self):
+#         return ' '.join([str(p) for p in self.profile.all()])
+#
+#     def __str__(self):
+#         return self.description
 
 
 class Profession(models.Model):

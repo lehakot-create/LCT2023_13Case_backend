@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import (Status, Stack, Profile, TypeProject,
-                     Public, Direction, Rate, Stage, Project, Task)
+# from .models import (Status, Stack, Profile, TypeProject,
+#                      Public, Direction, Rate, Stage, Project, Task)
 
 # Register your models here.
 # admin.site.register((Status, Stack, TypeProject, Public,
