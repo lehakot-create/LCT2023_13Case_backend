@@ -1,3 +1,4 @@
+from djoser.serializers import UserCreateSerializer, TokenSerializer
 from rest_framework import serializers
 from .models import Profile, Project, Stack, Task, Profession
 
@@ -75,3 +76,25 @@ class ProfessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profession
         fields = "__all__"
+
+
+class MyTokenSerializer(TokenSerializer):
+    auth_token = serializers.CharField(source="key")
+    id = serializers.SerializerMethodField()
+    role = serializers.SerializerMethodField()
+
+    class Meta(UserCreateSerializer.Meta):
+        model = Profile
+        fields = (
+            'id',
+            'auth_token',
+            'role',
+        )
+
+    def get_id(self, obj):
+        user = obj.user
+        return user.id
+
+    def get_role(self, obj):
+        user = obj.user
+        return user.role
