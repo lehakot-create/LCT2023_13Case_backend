@@ -1,6 +1,6 @@
 from djoser.serializers import UserCreateSerializer, TokenSerializer
 from rest_framework import serializers
-from .models import Profile, Project, Stack, Task, Profession
+from .models import Profile, Project, Stack, Task, Profession, Country
 
 
 class MostPopularProjectsSerializer(serializers.HyperlinkedModelSerializer):
@@ -46,7 +46,12 @@ class GetProjectSerializer(serializers.ModelSerializer):
 class ProfileViewSetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ('id', 'nick_name', 'email', 'role', 'is_active')
+        fields = ('id', 'nick_name', 'role',
+                  'full_name', 'dateofbirth', 'country', 'citizenship',
+                  'gender', 'email', 'agreement',
+                  'education', 'employment',
+                  'experience', 'achievements', 'profession',
+                  'stack', 'role_in_command', 'command', 'status', )
         # fields = "__all__"
 
 
@@ -98,3 +103,9 @@ class MyTokenSerializer(TokenSerializer):
     def get_role(self, obj):
         user = obj.user
         return user.role
+
+
+class CountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = '__all__'

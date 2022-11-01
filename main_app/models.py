@@ -255,8 +255,23 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     """
     email = models.EmailField(unique=True, max_length=255)
     nick_name = models.CharField(max_length=255, blank=True)
+    full_name = models.CharField(max_length=255, blank=True)
     first_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)
+    dateofbirth = models.CharField(max_length=10, blank=True)
+    country = models.CharField(max_length=64, blank=True)
+    citizenship = models.CharField(max_length=64, blank=True)
+    agreement = models.BooleanField(default=False)
+    gender = models.CharField(max_length=10, blank=True)
+    education = models.CharField(max_length=256, blank=True, verbose_name='Образование')
+    employment = models.CharField(max_length=256, blank=True, verbose_name='Занятость')
+    experience = models.CharField(max_length=256, blank=True, verbose_name='Опыт')
+    achievements = models.CharField(max_length=256, blank=True, verbose_name='Достижения')
+    profession = models.CharField(max_length=128, blank=True, verbose_name='Направление')
+    stack = models.CharField(max_length=128, blank=True, verbose_name='Навыки')
+    role_in_command = models.CharField(max_length=128, blank=True)
+    command = models.CharField(max_length=3, blank=True, verbose_name='Наличие команды')
+
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     user = 'US'
@@ -266,16 +281,17 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         (moderator, 'Администратор')
     ]
     role = models.CharField(max_length=2, choices=choice, default=user)
+    status = models.CharField(max_length=64, blank=True, verbose_name='Готовность участия в проектах')
 
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 
-    id_status = models.ForeignKey(Status, default=1, on_delete=models.DO_NOTHING,
-                                  verbose_name='ID статуса')  # применить
-    description = models.CharField(max_length=1024, verbose_name='Описание')  # Описание
-    img = models.ImageField(blank=True, null=True, verbose_name='Аватар')  # посмотреть тип картинка
-    stack = models.ManyToManyField(Stack, verbose_name='Стек технологий')  # Список технологий должен
+    # id_status = models.ForeignKey(Status, default=1, on_delete=models.DO_NOTHING,
+    #                               verbose_name='ID статуса')  # применить
+    # description = models.CharField(max_length=1024, verbose_name='Описание')  # Описание
+    # img = models.ImageField(blank=True, null=True, verbose_name='Аватар')  # посмотреть тип картинка
+    # stack = models.ManyToManyField(Stack, verbose_name='Стек технологий')  # Список технологий должен
     # rating = models.ForeignKey(Project, on_delete=models.DO_NOTHING)  # Рейтинг
-    telephone = models.CharField(max_length=50, verbose_name='Телефон')  # тип номер телефона
+    # telephone = models.CharField(max_length=50, verbose_name='Телефон')  # тип номер телефона
 
     objects = UserManager()
 
@@ -357,3 +373,7 @@ class Idea(models.Model):
     name = models.CharField(max_length=128, null=True)
     description = models.CharField(max_length=512, null=True)
     stack = models.ManyToManyField('Stack')
+
+
+class Country(models.Model):
+    name = models.CharField(max_length=128, blank=True)

@@ -9,7 +9,7 @@ from main_app.views import (ProfileViewSet,
                             CreateProjectApiView,
                             CreateTaskApiView,
                             GetUserProjects,
-                            ProfessionView,
+                            ProfessionView, CountryView,
                             )
 
 router = routers.DefaultRouter()
@@ -18,6 +18,7 @@ router.register(r'v1/popular_proj', MostPopularProjectsViewSet)
 router.register(r'v1/search', FindProjects)
 router.register(r'v1/stacks', GetStacks)
 router.register(r'v1/profession', ProfessionView)
+router.register(r'v1/country', CountryView)
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -15,7 +15,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from djoser.conf import settings
 
-from .models import Profile, Project, Stack, Task, Profession
+from .models import Profile, Project, Stack, Task, Profession, Country
 from .serializers import (
     ProfileViewSetSerializer,
     MostPopularProjectsSerializer,
@@ -23,7 +23,7 @@ from .serializers import (
     SearchProjectsSerializer,
     GetProjectSerializer,
     GetTasksSerializer,
-    ProfessionSerializer,
+    ProfessionSerializer, CountrySerializer,
 )
 
 
@@ -174,5 +174,16 @@ class GetUserProjects(ListAPIView):
 
 
 class ProfessionView(viewsets.ModelViewSet):
+    """
+    Возвращает список профессий
+    """
     queryset = Profession.objects.all()
     serializer_class = ProfessionSerializer
+
+
+class CountryView(viewsets.ModelViewSet):
+    """
+    Возвращает список стран
+    """
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer

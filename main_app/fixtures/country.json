@@ -1,0 +1,4 @@
+[{"model": "main_app.country", "pk": 1, "fields": {"name": "Россия"}},
+  {"model": "main_app.country", "pk": 2, "fields": {"name": "Беларусь"}},
+  {"model": "main_app.country", "pk": 3, "fields": {"name": "Казахстан"}}
+]
