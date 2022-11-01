@@ -176,10 +176,10 @@ class Project(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta:
-        verbose_name = 'проект'
-        verbose_name_plural = 'проекты'
-        indexes = [GinIndex(fields=['name'])]
+    # class Meta:
+    #     verbose_name = 'проект'
+    #     verbose_name_plural = 'проекты'
+    #     indexes = [GinIndex(fields=['name'])]
 
 
 class UserManager(BaseUserManager):
