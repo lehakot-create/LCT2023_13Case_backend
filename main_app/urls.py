@@ -2,14 +2,14 @@ from django.conf.urls import url
 from django.urls import path, include
 from rest_framework import routers
 from main_app.views import (ProfileViewSet,
-                            # MostPopularProjectsViewSet,
+    # MostPopularProjectsViewSet,
                             ActivateUser,
                             GetStacks,
                             FindProjects,
                             CreateProjectApiView,
-                            # CreateTaskApiView,
+    # CreateTaskApiView,
                             GetUserProjects,
-                            ProfessionView, CountryView,
+                            ProfessionView, CountryView, IdeaView, UserIdeaView,
                             )
 
 router = routers.DefaultRouter()
@@ -19,6 +19,8 @@ router.register(r'v1/search', FindProjects)
 router.register(r'v1/stacks', GetStacks)
 router.register(r'v1/profession', ProfessionView)
 router.register(r'v1/country', CountryView)
+router.register(r'v1/all_ideas', IdeaView)
+# router.register(r'v1/user_ideas', UserIdeaView)
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -29,4 +31,5 @@ urlpatterns = [
     path('v1/user-projects/', GetUserProjects.as_view()),
     url(r'^v1/auth/', include('djoser.urls')),
     url(r'^v1/auth/', include('djoser.urls.authtoken')),
+    path('v1/user_ideas/', UserIdeaView.as_view()),
 ]

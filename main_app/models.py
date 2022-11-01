@@ -370,8 +370,9 @@ class Comment(models.Model):
 
 
 class Idea(models.Model):
+    author = models.ForeignKey('Profile', on_delete=models.DO_NOTHING)
     name = models.CharField(max_length=128, null=True)
-    description = models.CharField(max_length=512, null=True)
+    description = models.TextField(null=True)
     stack = models.ManyToManyField('Stack')
 
 

@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, authentication
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404, ListCreateAPIView, ListAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
@@ -15,7 +15,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from djoser.conf import settings
 
-from .models import Profile, Project, Stack, Profession, Country
+from .models import Profile, Project, Stack, Profession, Country, Idea
 from .serializers import (
     ProfileViewSetSerializer,
     MostPopularProjectsSerializer,
@@ -23,7 +23,7 @@ from .serializers import (
     SearchProjectsSerializer,
     GetProjectSerializer,
     # GetTasksSerializer,
-    ProfessionSerializer, CountrySerializer,
+    ProfessionSerializer, CountrySerializer, IdeaSerializer,
 )
 
 
@@ -187,3 +187,28 @@ class CountryView(viewsets.ModelViewSet):
     """
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
+
+
+class IdeaView(viewsets.ModelViewSet):
+    """
+    Возвращает все идеи
+    """
+    queryset = Idea.objects.all()
+    serializer_class = IdeaSerializer
+
+
+class UserIdeaView(APIView):
+    """
+    Возвращает идеи пользователя
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+    queryset = Idea.objects.all()
+
+    def get_queryset(self, pk):
+        ideas = Idea.objects.filter(author=pk)
+        return ideas
+
+    def list(self, request):
+        ideas = self.get_queryset(pk=request.get('pk'))
+        serializer = IdeaSerializer(ideas, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

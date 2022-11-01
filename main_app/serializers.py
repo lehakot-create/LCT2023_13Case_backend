@@ -1,6 +1,7 @@
-from djoser.serializers import UserCreateSerializer, TokenSerializer
 from rest_framework import serializers
-from .models import Profile, Project, Stack, Profession, Country
+from djoser.serializers import UserCreateSerializer, TokenSerializer
+
+from .models import Profile, Project, Stack, Profession, Country, Idea
 
 
 class MostPopularProjectsSerializer(serializers.HyperlinkedModelSerializer):
@@ -108,4 +109,10 @@ class MyTokenSerializer(TokenSerializer):
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
+        fields = '__all__'
+
+
+class IdeaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Idea
         fields = '__all__'
