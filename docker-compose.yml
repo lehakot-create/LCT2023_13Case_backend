@@ -3,7 +3,7 @@ version: '3.7'
 services:
   web:
     build: .
-    command: sh -c "python manage.py migrate  && python manage.py loaddata main_app/fixtures/add_directions.json && python manage.py loaddata main_app/fixtures/country.json && python manage.py filldb && python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "python manage.py migrate  && python manage.py loaddata main_app/fixtures/profile.json && python manage.py loaddata main_app/fixtures/add_directions.json && python manage.py loaddata main_app/fixtures/country.json && python manage.py filldb && python manage.py create_profile && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./:/usr/src/prj/
     ports:

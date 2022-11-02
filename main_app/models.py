@@ -288,7 +288,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     # id_status = models.ForeignKey(Status, default=1, on_delete=models.DO_NOTHING,
     #                               verbose_name='ID статуса')  # применить
     # description = models.CharField(max_length=1024, verbose_name='Описание')  # Описание
-    # img = models.ImageField(blank=True, null=True, verbose_name='Аватар')  # посмотреть тип картинка
+    img = models.ImageField(blank=True, null=True, verbose_name='Аватар')  # посмотреть тип картинка
     # stack = models.ManyToManyField(Stack, verbose_name='Стек технологий')  # Список технологий должен
     # rating = models.ForeignKey(Project, on_delete=models.DO_NOTHING)  # Рейтинг
     # telephone = models.CharField(max_length=50, verbose_name='Телефон')  # тип номер телефона
