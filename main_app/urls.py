@@ -9,7 +9,7 @@ from main_app.views import (ProfileViewSet,
                             CreateProjectApiView,
     # CreateTaskApiView,
                             GetUserProjects,
-                            ProfessionView, CountryView, IdeaView, UserIdeaView,
+                            ProfessionView, CountryView, IdeaView, UserIdeaListView,
                             )
 
 router = routers.DefaultRouter()
@@ -28,8 +28,9 @@ urlpatterns = [
     path('v1/api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('v1/project/', CreateProjectApiView.as_view()),
     # path('v1/tasks/', CreateTaskApiView.as_view()),
-    path('v1/user-projects/', GetUserProjects.as_view()),
+    # path('v1/user-projects/', GetUserProjects.as_view()),
     url(r'^v1/auth/', include('djoser.urls')),
     url(r'^v1/auth/', include('djoser.urls.authtoken')),
-    path('v1/user_ideas/', UserIdeaView.as_view()),
+    path('v1/user_ideas/', UserIdeaListView.as_view()),
+    # path('v1/user_idea/<int:pk>/', UserIdeaDetailView.as_view()),
 ]

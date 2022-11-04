@@ -1,6 +1,6 @@
 import requests
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
@@ -197,18 +197,57 @@ class IdeaView(viewsets.ModelViewSet):
     serializer_class = IdeaSerializer
 
 
-class UserIdeaView(APIView):
+# class UserIdeaView(viewsets.ModelViewSet):
+#     """
+#     Возвращает идеи пользователя
+#     """
+#     authentication_classes = [authentication.TokenAuthentication]
+#     queryset = Idea.objects.all()
+#     serializer_class = IdeaSerializer
+#
+#     def get_queryset(self, request):
+#         ideas = Idea.objects.filter(author=request.data.get('author'))
+#         return ideas
+#
+#     def list(self, request):
+#         ideas = self.get_queryset(request)
+#         serializer = IdeaSerializer(ideas, many=True)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UserIdeaListView(APIView):
     """
     Возвращает идеи пользователя
     """
     authentication_classes = [authentication.TokenAuthentication]
     queryset = Idea.objects.all()
+    serializer_class = IdeaSerializer
 
-    def get_queryset(self, pk):
-        ideas = Idea.objects.filter(author=pk)
+    def get_queryset(self, request):
+        ideas = Idea.objects.filter(author=request.data.get('author'))
         return ideas
 
-    def list(self, request):
-        ideas = self.get_queryset(pk=request.get('pk'))
+    def get(self, request):
+        ideas = self.get_queryset(request)
         serializer = IdeaSerializer(ideas, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = IdeaSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# class UserIdeaDetailView(APIView):
+#     def get_object(self, pk):
+#         try:
+#             return Idea.objects.get(pk=pk)
+#         except Idea.DoesNotExist:
+#             raise Http404
+#
+#     def get(self, request, pk):
+#         idea = self.get_object(pk)
+#         serializer = IdeaSerializer(idea)
+#         return Response(serializer.data)
