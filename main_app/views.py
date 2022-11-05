@@ -246,9 +246,9 @@ class CommentListView(APIView):
     """
     def get_queryset(self, request):
         try:
-            comments = Comment.objects.filter(idea=request.data.get('idea'))
+            comments = IdeaComment.objects.filter(idea=request.data.get('idea'))
             return comments
-        except Comment.DoesNotExist:
+        except IdeaComment.DoesNotExist:
             raise Http404
 
     def get(self, request):

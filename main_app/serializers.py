@@ -113,9 +113,16 @@ class CountrySerializer(serializers.ModelSerializer):
 
 
 class IdeaSerializer(serializers.ModelSerializer):
+    # stack = serializers.CharField(source='stack.name', read_only=True)
+
     class Meta:
         model = Idea
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ('id', 'name', 'description', 'author',  'stack')
+
+    # def get_stack(self, obj):
+    #     stack = obj.stack.all()
+    #     return stack
 
 
 class CommentSerializer(serializers.ModelSerializer):
