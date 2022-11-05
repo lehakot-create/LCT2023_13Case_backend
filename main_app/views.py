@@ -223,12 +223,12 @@ class UserIdeaListView(APIView):
     queryset = Idea.objects.all()
     serializer_class = IdeaSerializer
 
-    def get_queryset(self, request):
-        ideas = Idea.objects.filter(author=request.data.get('author'))
+    def get_queryset(self, pk):
+        ideas = Idea.objects.filter(author=pk)
         return ideas
 
-    def get(self, request):
-        ideas = self.get_queryset(request)
+    def get(self, request, pk):
+        ideas = self.get_queryset(pk)
         serializer = IdeaSerializer(ideas, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -271,7 +271,6 @@ class ProfileDetailView(APIView):
     def get_object(self, pk):
         try:
             profile = Profile.objects.get(id=pk)
-            print(profile)
             return profile
         except Profile.DoesNotExist:
             raise Http404
