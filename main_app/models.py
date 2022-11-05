@@ -270,7 +270,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     profession = models.CharField(max_length=128, blank=True, verbose_name='Направление')
     stack = models.CharField(max_length=128, blank=True, verbose_name='Навыки')
     role_in_command = models.CharField(max_length=128, blank=True)
-    command = models.CharField(max_length=3, blank=True, verbose_name='Наличие команды')
+    command = models.CharField(max_length=500, blank=True, verbose_name='Наличие команды')
 
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
