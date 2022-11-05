@@ -10,6 +10,7 @@ from main_app.views import (ProfileViewSet,
     # CreateTaskApiView,
                             GetUserProjects,
                             ProfessionView, CountryView, IdeaView, UserIdeaListView, CommentListView, ProfileDetailView,
+                            UserIdeaCreateView,
                             )
 
 router = routers.DefaultRouter()
@@ -31,6 +32,7 @@ urlpatterns = [
     # path('v1/user-projects/', GetUserProjects.as_view()),
     url(r'^v1/auth/', include('djoser.urls')),
     url(r'^v1/auth/', include('djoser.urls.authtoken')),
+    path('v1/user_ideas/', UserIdeaCreateView.as_view()),
     path('v1/user_ideas/<int:pk>/', UserIdeaListView.as_view()),
     path('v1/comment/<int:pk>/', CommentListView.as_view()),
     path('v1/profile/<int:pk>/', ProfileDetailView.as_view()),

@@ -232,6 +232,22 @@ class UserIdeaListView(APIView):
         serializer = IdeaSerializer(ideas, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    # def post(self, request):
+    #     serializer = IdeaSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserIdeaCreateView(APIView):
+    """
+    Создает идею
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+    queryset = Idea.objects.all()
+    serializer_class = IdeaSerializer
+
     def post(self, request):
         serializer = IdeaSerializer(data=request.data)
         if serializer.is_valid():
