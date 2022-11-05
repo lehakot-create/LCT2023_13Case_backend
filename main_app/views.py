@@ -15,7 +15,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from djoser.conf import settings
 
-from .models import Profile, Project, Stack, Profession, Country, Idea
+from .models import Profile, Project, Stack, Profession, Country, Idea, Comment
 from .serializers import (
     ProfileViewSetSerializer,
     MostPopularProjectsSerializer,
@@ -23,7 +23,7 @@ from .serializers import (
     SearchProjectsSerializer,
     GetProjectSerializer,
     # GetTasksSerializer,
-    ProfessionSerializer, CountrySerializer, IdeaSerializer,
+    ProfessionSerializer, CountrySerializer, IdeaSerializer, CommentSerializer
 )
 
 
@@ -240,14 +240,25 @@ class UserIdeaListView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class UserIdeaDetailView(APIView):
-#     def get_object(self, pk):
-#         try:
-#             return Idea.objects.get(pk=pk)
-#         except Idea.DoesNotExist:
-#             raise Http404
-#
-#     def get(self, request, pk):
-#         idea = self.get_object(pk)
-#         serializer = IdeaSerializer(idea)
-#         return Response(serializer.data)
+class CommentListView(APIView):
+    """
+    Создает коммент и возвращает все комменты к данной идее
+    """
+    def get_queryset(self, request):
+        try:
+            comments = Comment.objects.filter(idea=request.data.get('idea'))
+            return comments
+        except Comment.DoesNotExist:
+            raise Http404
+
+    def get(self, request):
+        comment = self.get_queryset(request)
+        serializer = CommentSerializer(comment, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
