@@ -244,15 +244,15 @@ class CommentListView(APIView):
     """
     Создает коммент и возвращает все комменты к данной идее
     """
-    def get_queryset(self, request):
+    def get_queryset(self, pk):
         try:
-            comments = IdeaComment.objects.filter(idea=request.data.get('idea'))
+            comments = IdeaComment.objects.filter(idea=pk)
             return comments
         except IdeaComment.DoesNotExist:
             raise Http404
 
-    def get(self, request):
-        comment = self.get_queryset(request)
+    def get(self, request, pk):
+        comment = self.get_queryset(pk)
         serializer = CommentSerializer(comment, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
