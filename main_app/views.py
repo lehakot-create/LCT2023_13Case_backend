@@ -268,27 +268,28 @@ class ProfileDetailView(APIView):
     """
     Возвращает и обновляет профиль по id
     """
-    def get_object(self, request):
+    def get_object(self, pk):
         try:
-            profile = Profile.objects.get(id=request.data.get('id'))
+            profile = Profile.objects.get(id=pk)
+            print(profile)
             return profile
         except Profile.DoesNotExist:
             raise Http404
 
-    def get(self, request):
+    def get(self, request, pk):
         """
         Возвращает профиль по id
         """
-        profile = self.get_object(request)
+        profile = self.get_object(pk)
         serializer = ProfileViewSetSerializer(profile)
         return Response(serializer.data)
 
-    def put(self, request):
+    def put(self, request, pk):
         """
         Обновляет данные профиля
         params: id
         """
-        profile = self.get_object(request)
+        profile = self.get_object(pk)
         serializer = ProfileViewSetSerializer(profile, data=request.data)
         if serializer.is_valid():
             serializer.save()

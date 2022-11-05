@@ -122,6 +122,7 @@ class IdeaSerializer(serializers.ModelSerializer):
 
     # def get_stack(self, obj):
     #     stack = obj.stack.all()
+    #     print(stack)
     #     return stack
 
 
