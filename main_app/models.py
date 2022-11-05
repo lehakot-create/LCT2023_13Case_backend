@@ -262,7 +262,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     country = models.CharField(max_length=64, blank=True)
     citizenship = models.CharField(max_length=64, blank=True)
     agreement = models.BooleanField(default=False)
-    gender = models.CharField(max_length=10, blank=True)
+    gender = models.CharField(max_length=100, blank=True)
     education = models.CharField(max_length=256, blank=True, verbose_name='Образование')
     employment = models.CharField(max_length=256, blank=True, verbose_name='Занятость')
     experience = models.CharField(max_length=256, blank=True, verbose_name='Опыт')
