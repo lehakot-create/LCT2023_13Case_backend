@@ -262,3 +262,35 @@ class CommentListView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProfileDetailView(APIView):
+    """
+    Возвращает и обновляет профиль по id
+    """
+    def get_object(self, request):
+        try:
+            profile = Profile.objects.get(id=request.data.get('id'))
+            return profile
+        except Profile.DoesNotExist:
+            raise Http404
+
+    def get(self, request):
+        """
+        Возвращает профиль по id
+        """
+        profile = self.get_object(request)
+        serializer = ProfileViewSetSerializer(profile)
+        return Response(serializer.data)
+
+    def put(self, request):
+        """
+        Обновляет данные профиля
+        params: id
+        """
+        profile = self.get_object(request)
+        serializer = ProfileViewSetSerializer(profile, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
