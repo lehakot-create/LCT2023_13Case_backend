@@ -143,24 +143,24 @@ class Project(models.Model):
     """
     Таблица проектов
     """
-    id_project_type = models.ForeignKey(TypeProject, on_delete=models.DO_NOTHING, verbose_name='Тип проекта', default=2)
-    name = models.CharField(max_length=128, verbose_name='Название проекта')
-    id_type = models.ForeignKey(Public, on_delete=models.DO_NOTHING,
-                                verbose_name='Доступность проекта', default=1)  # Тип проекта (открытый/закрытый)
+    author = models.ForeignKey('Profile', on_delete=models.DO_NOTHING)
+    name = models.CharField(max_length=128, null=True)
+    description = models.TextField(null=True)
+    status = models.CharField(max_length=64)
 
-    # author = models.ForeignKey(Users, on_delete=models.DO_NOTHING)
-    members_limit = models.IntegerField(validators=[MinValueValidator(1)],
-                                        verbose_name='Максимальное количество участников', default=1)  # Максимальное количество участников
-    profile = models.ManyToManyField('Profile',
-                                     verbose_name='Список участников', blank=True, related_name='profile_project')  # Список участников. Получаем список всех участников проекта
+
+    # members_limit = models.IntegerField(validators=[MinValueValidator(1)],
+    #                                     verbose_name='Максимальное количество участников', default=1)  # Максимальное количество участников
+    # profile = models.ManyToManyField('Profile',
+    #                                  verbose_name='Список участников', blank=True, related_name='profile_project')  # Список участников. Получаем список всех участников проекта
     # direction = models.ForeignKey(Direction, on_delete=models.CASCADE, verbose_name='Направление проекта')
-    description = models.TextField(verbose_name='Описание проекта', default='Описание проекта')
-    deadline = models.DateField(verbose_name='Срок окончания проекта', blank=True, null=True)  # срок окончания проекта
+    # description = models.TextField(verbose_name='Описание проекта', default='Описание проекта')
+    # deadline = models.DateField(verbose_name='Срок окончания проекта', blank=True, null=True)  # срок окончания проекта
     # id_rate = models.ForeignKey(Rate, on_delete=models.DO_NOTHING, verbose_name='Тариф', default=1)  # тариф
     # id_stage = models.ForeignKey(Stage, on_delete=models.DO_NOTHING, null=True, blank=True,
     #                              verbose_name='Стадия проекта')
     rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], verbose_name='Рейтинг', default=100)
-    colour = models.CharField(max_length=20, default='green')
+    # colour = models.CharField(max_length=20, default='green')
 
     # def set_rating(self, rate):
     #     try:
@@ -362,11 +362,18 @@ class Profession(models.Model):
     name = models.CharField(max_length=128, null=True, verbose_name="Профессия")
 
 
-class Comment(models.Model):
+class IdeaComment(models.Model):
     author = models.ForeignKey('Profile', on_delete=models.DO_NOTHING)
     date_create = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
     idea = models.ForeignKey('Idea', on_delete=models.DO_NOTHING)
+
+
+class ProjectComment(models.Model):
+    author = models.ForeignKey('Profile', on_delete=models.DO_NOTHING)
+    date_create = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()
+    idea = models.ForeignKey('Project', on_delete=models.DO_NOTHING)
 
 
 class Idea(models.Model):

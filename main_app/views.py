@@ -15,7 +15,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from djoser.conf import settings
 
-from .models import Profile, Project, Stack, Profession, Country, Idea, Comment
+from .models import Profile, Project, Stack, Profession, Country, Idea, IdeaComment
 from .serializers import (
     ProfileViewSetSerializer,
     MostPopularProjectsSerializer,

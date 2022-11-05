@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from djoser.serializers import UserCreateSerializer, TokenSerializer
 
-from .models import Profile, Project, Stack, Profession, Country, Idea, Comment
+from .models import Profile, Project, Stack, Profession, Country, Idea, IdeaComment
 
 
 class MostPopularProjectsSerializer(serializers.HyperlinkedModelSerializer):
@@ -23,7 +23,7 @@ class SearchProjectsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('name', 'description', 'deadline',)
+        fields = ('name', 'description', 'deadline')
 
 
 class GetProjectSerializer(serializers.ModelSerializer):
@@ -33,7 +33,7 @@ class GetProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('id', 'name', 'description', 'colour', 'profile')
+        fields = ('id', 'name', 'description', 'profile')
 
     def create(self, validated_data):
         user_list = [self.context['request'].auth.user_id]
@@ -120,5 +120,5 @@ class IdeaSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Comment
+        model = IdeaComment
         fields = '__all__'
