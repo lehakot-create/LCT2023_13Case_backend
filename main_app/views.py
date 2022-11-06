@@ -1,30 +1,26 @@
 import requests
-from django.db.models import Q
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from django.views import View
-from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView
-from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
+from django.contrib.postgres.search import SearchQuery, SearchVector
 
 from rest_framework import viewsets, status, authentication
-from rest_framework.decorators import action
-from rest_framework.generics import get_object_or_404, ListCreateAPIView, ListAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.generics import ListCreateAPIView, ListAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.schemas.openapi import AutoSchema
 from djoser.conf import settings
 
 from .models import Profile, Project, Stack, Profession, Country, Idea, IdeaComment
 from .serializers import (
     ProfileViewSetSerializer,
-    MostPopularProjectsSerializer,
     StacksSerializer,
     SearchProjectsSerializer,
     GetProjectSerializer,
-    # GetTasksSerializer,
-    ProfessionSerializer, CountrySerializer, IdeaSerializer, CommentSerializer
+    ProfessionSerializer,
+    CountrySerializer,
+    IdeaSerializer,
+    CommentSerializer
 )
 
 
@@ -38,30 +34,6 @@ class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileViewSetSerializer
 
-    # Реализовано через декоратор @action. Можно вручную описать json ответ    #
-    # """
-    #   popular_proj Возвращает json ответ по адресу http://127.0.0.1:8000/api/profile/popular_proj/
-    # """
-    #
-    # @action(methods=['get'], detail=False)
-    # def popular_proj(self, request):
-    #     popular_proj = Project.objects.order_by('-rating')[:3]
-    #     return Response({'popular_proj': [{'name': p.name, 'rating': p.rating} for p in popular_proj]})
-
-
-# class MostPopularProjectsViewSet(viewsets.ModelViewSet):
-#     """
-#     Представление возвращает json ответ с 3-мя популярными проектами
-#
-#     Возвращает json ответ по адресу http://127.0.0.1:8000/api/popular_proj/
-#     """
-#
-#     queryset = Project.objects.all()
-#     serializer_class = MostPopularProjectsSerializer
-#
-#     def get_queryset(self):
-#         return Project.objects.order_by('-rating')[:3]
-
 
 class ActivateUser(View):
     """
@@ -71,7 +43,6 @@ class ActivateUser(View):
 
     def get_context_data(self):
         context = super().get_context_data()
-
         context['site_name'] = "Портал инноваций"
         context['protocol'] = 'http'
         context['domain'] = '0.0.0.0:8000'
@@ -83,7 +54,6 @@ class ActivateUser(View):
         url = "http://localhost:8000/api/v1/auth/users/activation/"
         response = requests.post(url, data=payload)
         if response.status_code == 204:
-            # return HttpResponse("Профиль успешно активирован!")
             return render(request, "email/activation_complete.html")
         else:
             return HttpResponse(response)
@@ -112,17 +82,13 @@ class FindProjects(viewsets.ModelViewSet):
             for q in query:
                 search_query |= SearchQuery(value=q)
             search_vector = SearchVector('name', 'direction__name')
-
-            # запрос на поиск проекта по ключевым словам в поле name и direction.
             return Project.objects.annotate(search=search_vector).filter(search=search_query)
 
 
-# @csrf_exempt # удалить декоратор
 class CreateProjectApiView(ListCreateAPIView):
     """
     Представление возвращает наименование, описание, id и цвет по проекту
     """
-
     queryset = Project.objects.all()
     serializer_class = GetProjectSerializer
     permission_classes = (IsAuthenticated,)
@@ -137,25 +103,6 @@ class CreateProjectApiView(ListCreateAPIView):
         return Project.objects.all()
 
 
-# class CreateTaskApiView(ListCreateAPIView):
-#     """
-#     Представление возвращает наименование, описание и цвет проекта по его id
-#     """
-#     queryset = Task.objects.all()
-#     serializer_class = GetTasksSerializer
-#
-#     # permission_classes = (AllowAny)Project.objects.values_list('members')alues_list('members')
-#
-#     def perform_create(self, serializer):
-#         serializer.save()
-#
-#     def get_queryset(self):
-#         id = self.request.GET.get('id')
-#         if id:
-#             return Task.objects.filter(pk=int(id))
-#         return Task.objects.all()
-
-
 class GetUserProjects(ListAPIView):
     """
     Представление возвращает список всех проектов пользователя:
@@ -165,12 +112,8 @@ class GetUserProjects(ListAPIView):
     serializer_class = GetProjectSerializer
 
     def get_queryset(self):
-        # Получил из запроса id пользователя по токену
         user_id = str(self.request.user.id)
-        # Создал объект пользователя по полученному id
         user = Profile.objects.get(pk=user_id)
-        # profile_project - это промежуточная таблица (название указано в related_name)
-        # у объекта получаю список всех проектов через промежуточную таблицу
         return user.profile_project.all()
 
 
@@ -196,24 +139,6 @@ class IdeaView(viewsets.ModelViewSet):
     """
     queryset = Idea.objects.all()
     serializer_class = IdeaSerializer
-
-
-# class UserIdeaView(viewsets.ModelViewSet):
-#     """
-#     Возвращает идеи пользователя
-#     """
-#     authentication_classes = [authentication.TokenAuthentication]
-#     queryset = Idea.objects.all()
-#     serializer_class = IdeaSerializer
-#
-#     def get_queryset(self, request):
-#         ideas = Idea.objects.filter(author=request.data.get('author'))
-#         return ideas
-#
-#     def list(self, request):
-#         ideas = self.get_queryset(request)
-#         serializer = IdeaSerializer(ideas, many=True)
-#         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class UserIdeaListView(APIView):

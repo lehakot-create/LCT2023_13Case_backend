@@ -16,7 +16,6 @@ import environ
 import os
 
 env = environ.Env(
-    # set casting, default value
     DEBUG=(bool, False)
 )
 
@@ -104,7 +103,6 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
-# Валидация пароля на стороне фронтенда, поэтому отключаем ее на бэкенде
 AUTH_PASSWORD_VALIDATORS = [
     # {
     #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -171,18 +169,6 @@ DJOSER = {
     }
 }
 
-
-
-# smpt
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.yandex.ru'
-# EMAIL_PORT = 465
-# EMAIL_USE_TLS = False
-# EMAIL_USE_SSL = True
-# EMAIL_HOST_USER = os.environ.get('EMAIL')
-# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
-# SERVER_EMAIL = EMAIL_HOST_USER
-# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_HOST = 'smtp.mail.ru'
 EMAIL_PORT = 2525
 EMAIL_USE_TLS = True

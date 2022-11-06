@@ -53,29 +53,6 @@ class ProfileViewSetSerializer(serializers.ModelSerializer):
                   'education', 'employment',
                   'experience', 'achievements', 'profession',
                   'stack', 'role_in_command', 'command', 'status', )
-        # fields = "__all__"
-
-
-# class GetTasksSerializer(serializers.ModelSerializer):
-#     profile = ProfileViewSetSerializer(many=True)
-#
-#     class Meta:
-#         model = Task
-#         fields = ('id', 'status', 'description', 'profile', 'project')
-#
-#     def create(self, validated_data):
-#         status = validated_data.__getitem__('status')
-#         description = validated_data.__getitem__('description')
-#         profiles = self.initial_data.get('profile')
-#         project = validated_data.__getitem__('project')
-#         profile_list = []
-#         for profile in profiles:
-#             profile_list.append(profile.get('id'))
-#         newTask = Task(status=status, description=description, project=project)
-#         newTask.save()
-#         newTask.profile.set(profile_list)
-#         newTask.save()
-#         return newTask
 
 
 class ProfessionSerializer(serializers.ModelSerializer):
@@ -113,17 +90,10 @@ class CountrySerializer(serializers.ModelSerializer):
 
 
 class IdeaSerializer(serializers.ModelSerializer):
-    # stack = serializers.CharField(source='stack.name', read_only=True)
-
     class Meta:
         model = Idea
         # fields = '__all__'
         fields = ('id', 'name', 'description', 'author',  'stack')
-
-    # def get_stack(self, obj):
-    #     stack = obj.stack.all()
-    #     print(stack)
-    #     return stack
 
 
 class CommentSerializer(serializers.ModelSerializer):

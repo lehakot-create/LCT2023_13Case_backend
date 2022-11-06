@@ -1,6 +1,5 @@
 from django.core.management.base import BaseCommand
 
-from .profession import value
 from ...models import Profile, Idea, Stack
 
 

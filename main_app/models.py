@@ -8,34 +8,12 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.utils.translation import gettext_lazy as _
-from django.contrib.postgres.indexes import GinIndex
-from django.contrib.postgres.fields import ArrayField
-
-
-# class Status(models.Model):
-#     STATUSES = (
-#         (1, 'Phisical'),
-#         (2, 'Legal'),
-#     )
-#
-#     status = models.PositiveIntegerField(choices=STATUSES, default=1,
-#                                          verbose_name='Статус - физическое/юридическое лицо')  # статус
-#
-#     def __str__(self):
-#         for el in Status.STATUSES:
-#             if el[0] == self.status:
-#                 return el[1]
-#
-#     class Meta:
-#         verbose_name = 'статус'
-#         verbose_name_plural = 'статусы'
 
 
 class Stack(models.Model):
     """
     Таблица с технологиями
     """
-
     name = models.CharField(max_length=64, verbose_name='Стек технологий')
 
     def __str__(self):
@@ -148,18 +126,23 @@ class Project(models.Model):
     description = models.TextField(null=True)
     status = models.CharField(max_length=64)
 
-
     # members_limit = models.IntegerField(validators=[MinValueValidator(1)],
-    #                                     verbose_name='Максимальное количество участников', default=1)  # Максимальное количество участников
+    #                                     verbose_name='Максимальное количество участников',
+    #                                     default=1)  # Максимальное количество участников
     # profile = models.ManyToManyField('Profile',
-    #                                  verbose_name='Список участников', blank=True, related_name='profile_project')  # Список участников. Получаем список всех участников проекта
+    #                                  verbose_name='Список участников',
+    #                                  blank=True,
+    #                                  related_name='profile_project')  # Список участников.
+    #                                  Получаем список всех участников проекта
     # direction = models.ForeignKey(Direction, on_delete=models.CASCADE, verbose_name='Направление проекта')
     # description = models.TextField(verbose_name='Описание проекта', default='Описание проекта')
-    # deadline = models.DateField(verbose_name='Срок окончания проекта', blank=True, null=True)  # срок окончания проекта
+    # deadline = models.DateField(verbose_name='Срок окончания проекта',
+    #                                       blank=True, null=True)  # срок окончания проекта
     # id_rate = models.ForeignKey(Rate, on_delete=models.DO_NOTHING, verbose_name='Тариф', default=1)  # тариф
     # id_stage = models.ForeignKey(Stage, on_delete=models.DO_NOTHING, null=True, blank=True,
     #                              verbose_name='Стадия проекта')
-    rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], verbose_name='Рейтинг', default=100)
+    rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)],
+                                 verbose_name='Рейтинг', default=100)
     # colour = models.CharField(max_length=20, default='green')
 
     # def set_rating(self, rate):
@@ -284,14 +267,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     status = models.CharField(max_length=64, blank=True, verbose_name='Готовность участия в проектах')
 
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
-
-    # id_status = models.ForeignKey(Status, default=1, on_delete=models.DO_NOTHING,
-    #                               verbose_name='ID статуса')  # применить
-    # description = models.CharField(max_length=1024, verbose_name='Описание')  # Описание
     img = models.ImageField(blank=True, null=True, verbose_name='Аватар')  # посмотреть тип картинка
-    # stack = models.ManyToManyField(Stack, verbose_name='Стек технологий')  # Список технологий должен
-    # rating = models.ForeignKey(Project, on_delete=models.DO_NOTHING)  # Рейтинг
-    # telephone = models.CharField(max_length=50, verbose_name='Телефон')  # тип номер телефона
 
     objects = UserManager()
 
