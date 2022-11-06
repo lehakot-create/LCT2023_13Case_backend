@@ -13,6 +13,7 @@ from rest_framework.generics import get_object_or_404, ListCreateAPIView, ListAP
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.schemas.openapi import AutoSchema
 from djoser.conf import settings
 
 from .models import Profile, Project, Stack, Profession, Country, Idea, IdeaComment
@@ -232,13 +233,6 @@ class UserIdeaListView(APIView):
         serializer = IdeaSerializer(ideas, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    # def post(self, request):
-    #     serializer = IdeaSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class UserIdeaCreateView(APIView):
     """
@@ -258,7 +252,7 @@ class UserIdeaCreateView(APIView):
 
 class CommentListView(APIView):
     """
-    Создает коммент и возвращает все комменты к данной идее
+     Возвращает все комменты к данной идее
     """
     def get_queryset(self, pk):
         try:
@@ -272,6 +266,11 @@ class CommentListView(APIView):
         serializer = CommentSerializer(comment, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+class CommentCreateView(APIView):
+    """
+    Создает коммент к идее
+    """
     def post(self, request):
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
