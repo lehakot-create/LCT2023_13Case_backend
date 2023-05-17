@@ -10,61 +10,61 @@ from django.core.mail import send_mail
 from django.utils.translation import gettext_lazy as _
 
 
-class Stack(models.Model):
-    """
-    Таблица с технологиями
-    """
-    name = models.CharField(max_length=64, verbose_name='Стек технологий')
+# class Stack(models.Model):
+#     """
+#     Таблица с технологиями
+#     """
+#     name = models.CharField(max_length=64, verbose_name='Стек технологий')
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
 
-    class Meta:
-        verbose_name = 'стек технологий'
-        verbose_name_plural = 'стек технологий'
-
-
-class TypeProject(models.Model):
-    """
-    Тип проекта - коммерческий/некоммерческий
-    """
-
-    PROJECT_TYPES = (
-        (1, 'Commercial'),
-        (2, 'Non commercial'),
-    )
-    type = models.PositiveIntegerField(choices=PROJECT_TYPES, default=1,
-                                       verbose_name='Тип проекта - коммерческий/некоммерческий')
-
-    def __str__(self):
-        for el in TypeProject.PROJECT_TYPES:
-            if el[0] == self.type:
-                return el[1]
-
-    class Meta:
-        verbose_name = 'тип проекта'
-        verbose_name_plural = 'типы проектов'
+#     class Meta:
+#         verbose_name = 'стек технологий'
+#         verbose_name_plural = 'стек технологий'
 
 
-class Public(models.Model):
-    """
-    Тип проекта - открытый/закрытый
-    """
+# class TypeProject(models.Model):
+#     """
+#     Тип проекта - коммерческий/некоммерческий
+#     """
 
-    TYPES = (
-        (1, 'Open'),
-        (2, 'Close'),
-    )
-    public = models.PositiveIntegerField(choices=TYPES, default=1, verbose_name='Доступность проекта')
+#     PROJECT_TYPES = (
+#         (1, 'Commercial'),
+#         (2, 'Non commercial'),
+#     )
+#     type = models.PositiveIntegerField(choices=PROJECT_TYPES, default=1,
+#                                        verbose_name='Тип проекта - коммерческий/некоммерческий')
 
-    def __str__(self):
-        for el in Public.TYPES:
-            if el[0] == self.public:
-                return el[1]
+#     def __str__(self):
+#         for el in TypeProject.PROJECT_TYPES:
+#             if el[0] == self.type:
+#                 return el[1]
 
-    class Meta:
-        verbose_name = 'доступность проекта'
-        verbose_name_plural = 'доступность проекта'
+#     class Meta:
+#         verbose_name = 'тип проекта'
+#         verbose_name_plural = 'типы проектов'
+
+
+# class Public(models.Model):
+#     """
+#     Тип проекта - открытый/закрытый
+#     """
+
+#     TYPES = (
+#         (1, 'Open'),
+#         (2, 'Close'),
+#     )
+#     public = models.PositiveIntegerField(choices=TYPES, default=1, verbose_name='Доступность проекта')
+
+#     def __str__(self):
+#         for el in Public.TYPES:
+#             if el[0] == self.public:
+#                 return el[1]
+
+#     class Meta:
+#         verbose_name = 'доступность проекта'
+#         verbose_name_plural = 'доступность проекта'
 
 
 # class Direction(models.Model):
@@ -117,14 +117,14 @@ class Public(models.Model):
 #         verbose_name_plural = 'стадии проектов'
 
 
-class Project(models.Model):
-    """
-    Таблица проектов
-    """
-    author = models.ForeignKey('Profile', on_delete=models.DO_NOTHING)
-    name = models.CharField(max_length=128, null=True)
-    description = models.TextField(null=True)
-    status = models.CharField(max_length=64)
+# class Project(models.Model):
+#     """
+#     Таблица проектов
+#     """
+#     author = models.ForeignKey('Profile', on_delete=models.DO_NOTHING)
+#     name = models.CharField(max_length=128, null=True)
+#     description = models.TextField(null=True)
+#     status = models.CharField(max_length=64)
 
     # members_limit = models.IntegerField(validators=[MinValueValidator(1)],
     #                                     verbose_name='Максимальное количество участников',
@@ -141,8 +141,8 @@ class Project(models.Model):
     # id_rate = models.ForeignKey(Rate, on_delete=models.DO_NOTHING, verbose_name='Тариф', default=1)  # тариф
     # id_stage = models.ForeignKey(Stage, on_delete=models.DO_NOTHING, null=True, blank=True,
     #                              verbose_name='Стадия проекта')
-    rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)],
-                                 verbose_name='Рейтинг', default=100)
+    # rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)],
+    #                              verbose_name='Рейтинг', default=100)
     # colour = models.CharField(max_length=20, default='green')
 
     # def set_rating(self, rate):
@@ -153,11 +153,11 @@ class Project(models.Model):
     #     self.rating = rate
     #     self.rating.save()
 
-    def get_rating(self):
-        return self.rating
+    # def get_rating(self):
+    #     return self.rating
 
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
     # class Meta:
     #     verbose_name = 'проект'
@@ -331,33 +331,33 @@ class Profile(AbstractBaseUser, PermissionsMixin):
 #         return self.description
 
 
-class Profession(models.Model):
-    """
-    Таблица профессий
-    """
-    name = models.CharField(max_length=128, null=True, verbose_name="Профессия")
+# class Profession(models.Model):
+#     """
+#     Таблица профессий
+#     """
+#     name = models.CharField(max_length=128, null=True, verbose_name="Профессия")
 
 
-class IdeaComment(models.Model):
-    author = models.ForeignKey('Profile', on_delete=models.DO_NOTHING)
-    date_create = models.DateTimeField(auto_now_add=True)
-    text = models.TextField()
-    idea = models.ForeignKey('Idea', on_delete=models.DO_NOTHING)
+# class IdeaComment(models.Model):
+#     author = models.ForeignKey('Profile', on_delete=models.DO_NOTHING)
+#     date_create = models.DateTimeField(auto_now_add=True)
+#     text = models.TextField()
+#     idea = models.ForeignKey('Idea', on_delete=models.DO_NOTHING)
 
 
-class ProjectComment(models.Model):
-    author = models.ForeignKey('Profile', on_delete=models.DO_NOTHING)
-    date_create = models.DateTimeField(auto_now_add=True)
-    text = models.TextField()
-    idea = models.ForeignKey('Project', on_delete=models.DO_NOTHING)
+# class ProjectComment(models.Model):
+#     author = models.ForeignKey('Profile', on_delete=models.DO_NOTHING)
+#     date_create = models.DateTimeField(auto_now_add=True)
+#     text = models.TextField()
+#     idea = models.ForeignKey('Project', on_delete=models.DO_NOTHING)
 
 
-class Idea(models.Model):
-    author = models.ForeignKey('Profile', on_delete=models.DO_NOTHING)
-    name = models.CharField(max_length=128, null=True)
-    description = models.TextField(null=True)
-    stack = models.ManyToManyField('Stack')
+# class Idea(models.Model):
+#     author = models.ForeignKey('Profile', on_delete=models.DO_NOTHING)
+#     name = models.CharField(max_length=128, null=True)
+#     description = models.TextField(null=True)
+#     stack = models.ManyToManyField('Stack')
 
 
-class Country(models.Model):
-    name = models.CharField(max_length=128, blank=True)
+# class Country(models.Model):
+#     name = models.CharField(max_length=128, blank=True)

@@ -1,6 +1,5 @@
 # Default ignored files
 .idea/
 **/__pycache__
-utils.py
 .env
 venv/
