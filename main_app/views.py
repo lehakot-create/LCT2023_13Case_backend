@@ -1,5 +1,5 @@
 import requests
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render
 from django.views import View
 
@@ -10,6 +10,7 @@ from djoser.conf import settings
 
 from .models import Profile
 from .serializers import ProfileViewSetSerializer
+from .tasks import my_task
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -76,3 +77,20 @@ class ProfileDetailView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class MyTaskView(APIView):
+    def post(self, request):
+        task = my_task.delay()
+        return JsonResponse({'id': task.id})
+
+    def get(self, request):
+        task_id = request.GET.get('id')
+        task_result = my_task.AsyncResult(task_id)
+        return JsonResponse({'status': task_result.status})
+
+
+class MyTaskDetailView(APIView):
+    def get(self, request, pk, format=None):
+        task_result = my_task.AsyncResult(pk)
+        return JsonResponse({'status': task_result.status})

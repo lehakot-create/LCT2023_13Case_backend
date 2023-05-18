@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.urls import path, include
-from rest_framework import routers
-from main_app.views import ActivateUser, ProfileDetailView
+
+from main_app.views import ActivateUser, ProfileDetailView, MyTaskView, MyTaskDetailView
 
 
 urlpatterns = [
@@ -11,4 +11,7 @@ urlpatterns = [
     url(r'^v1/auth/', include('djoser.urls')),
     url(r'^v1/auth/', include('djoser.urls.authtoken')),
     path('v1/profile/<int:pk>/', ProfileDetailView.as_view()),
+
+    path('tasks/', MyTaskView.as_view(), name='task'),
+    path('task/<str:pk>', MyTaskDetailView.as_view()),
 ]
